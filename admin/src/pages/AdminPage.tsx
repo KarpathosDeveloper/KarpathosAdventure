@@ -57,9 +57,22 @@ export function AdminPage() {
   useEffect(() => {
     let unsubscribe = () => {};
     if (auth) {
-      unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe = onAuthStateChanged(auth, async (user) => {
+        const adminUid = import.meta.env.VITE_ADMIN_UID || "zwymAmTWr0VQaU6wkeWvUJO7CzU2";
         if (user) {
-          setIsLoggedIn(true);
+          if (user.uid === adminUid) {
+            setIsLoggedIn(true);
+            setLoginError("");
+          } else {
+            console.error("Access denied: UID does not match admin UID.");
+            setLoginError("Access denied: You are not authorized to view the admin panel.");
+            setIsLoggedIn(false);
+            try {
+              await signOut(auth);
+            } catch (err) {
+              console.error("Failed to sign out unauthorized user:", err);
+            }
+          }
         } else {
           setIsLoggedIn(false);
         }
@@ -81,8 +94,15 @@ export function AdminPage() {
     
     if (auth) {
       try {
-        await signInWithEmailAndPassword(auth, email, password);
-        setLoginError("");
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const adminUid = import.meta.env.VITE_ADMIN_UID || "zwymAmTWr0VQaU6wkeWvUJO7CzU2";
+        if (userCredential.user.uid !== adminUid) {
+          setLoginError("Access denied: You are not authorized to view the admin panel.");
+          setIsLoggedIn(false);
+          await signOut(auth);
+        } else {
+          setLoginError("");
+        }
       } catch (err: any) {
         console.error("Firebase sign in error:", err);
         setLoginError(err.message || "Failed to sign in. Please verify credentials.");

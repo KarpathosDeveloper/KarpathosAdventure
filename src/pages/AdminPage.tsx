@@ -3,10 +3,13 @@ import { activitiesService } from "../services/activitiesService";
 import { bookingsService, type Booking, type BookingStatus } from "../services/bookingsService";
 import { CATEGORIES, type Activity } from "../data/activities";
 import { I } from "../components/Icon";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../lib/firebase";
 
 export function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [passcode, setPasscode] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [activities, setActivities] = useState<Activity[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,29 +55,81 @@ export function AdminPage() {
 
   // Check login on mount
   useEffect(() => {
-    const logged = sessionStorage.getItem("karpathos_admin_logged");
-    if (logged === "true") {
-      setIsLoggedIn(true);
+    let unsubscribe = () => {};
+    if (auth) {
+      unsubscribe = onAuthStateChanged(auth, async (user) => {
+        const adminUid = import.meta.env.VITE_ADMIN_UID || "zwymAmTWr0VQaU6wkeWvUJO7CzU2";
+        if (user) {
+          if (user.uid === adminUid) {
+            setIsLoggedIn(true);
+            setLoginError("");
+          } else {
+            console.error("Access denied: UID does not match admin UID.");
+            setLoginError("Access denied: You are not authorized to view the admin panel.");
+            setIsLoggedIn(false);
+            try {
+              await signOut(auth);
+            } catch (err) {
+              console.error("Failed to sign out unauthorized user:", err);
+            }
+          }
+        } else {
+          setIsLoggedIn(false);
+        }
+      });
+    } else {
+      const logged = sessionStorage.getItem("karpathos_admin_logged");
+      if (logged === "true") {
+        setIsLoggedIn(true);
+      }
     }
     loadActivities();
     loadBookings();
+    return () => unsubscribe();
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (passcode === "admin123") {
-      sessionStorage.setItem("karpathos_admin_logged", "true");
-      setIsLoggedIn(true);
-      setLoginError("");
+    setLoginError("");
+    
+    if (auth) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const adminUid = import.meta.env.VITE_ADMIN_UID || "zwymAmTWr0VQaU6wkeWvUJO7CzU2";
+        if (userCredential.user.uid !== adminUid) {
+          setLoginError("Access denied: You are not authorized to view the admin panel.");
+          setIsLoggedIn(false);
+          await signOut(auth);
+        } else {
+          setLoginError("");
+        }
+      } catch (err: any) {
+        console.error("Firebase sign in error:", err);
+        setLoginError(err.message || "Failed to sign in. Please verify credentials.");
+      }
     } else {
-      setLoginError("Invalid passcode. Try 'admin123'.");
+      if (email === "admin" && password === "admin123") {
+        sessionStorage.setItem("karpathos_admin_logged", "true");
+        setIsLoggedIn(true);
+        setLoginError("");
+      } else {
+        setLoginError("Invalid credentials. Try admin / admin123 in mock mode.");
+      }
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (auth) {
+      try {
+        await signOut(auth);
+      } catch (err) {
+        console.error("Failed to sign out:", err);
+      }
+    }
     sessionStorage.removeItem("karpathos_admin_logged");
     setIsLoggedIn(false);
-    setPasscode("");
+    setEmail("");
+    setPassword("");
   };
 
   const loadActivities = async () => {
@@ -372,18 +427,30 @@ export function AdminPage() {
               </svg>
             </div>
             <h1 className="font-display font-bold text-2xl text-navy">Admin Portal</h1>
-            <p className="text-sm text-navy/60 mt-1">Please enter passcode to access dashboard</p>
+            <p className="text-sm text-navy/60 mt-1">Please sign in to access dashboard</p>
           </div>
           
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-navy/60 mb-1">Passcode</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-navy/60 mb-1">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@example.com"
+                className="w-full px-4 py-3 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-navy/60 mb-1">Password</label>
               <input
                 type="password"
-                value={passcode}
-                onChange={(e) => setPasscode(e.target.value)}
-                placeholder="Enter passcode"
-                className="w-full px-4 py-3 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                className="w-full px-4 py-3 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                required
               />
             </div>
             {loginError && <p className="text-xs text-warn font-semibold">{loginError}</p>}
