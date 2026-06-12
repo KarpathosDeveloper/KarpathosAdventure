@@ -409,3 +409,12 @@ export const GUIDES: Record<string, Guide> = {
     relatedCategory: "Watersports & Diving"
   }
 };
+
+export const TRANSLATED_GUIDES: Record<string, Record<string, Guide>> = {
+  en: GUIDES,
+  el: {},
+  es: {},
+  fr: {},
+  de: {}
+};
+

@@ -144,4 +144,7 @@ export const I = {
       <path d="M22 6l-10 7L2 6" />
     </svg>
   ),
+  ChevronDown: (p: Props) => (
+    <svg {...base(p.size)} {...p}><path d="M6 9l6 6 6-6" /></svg>
+  ),
 };

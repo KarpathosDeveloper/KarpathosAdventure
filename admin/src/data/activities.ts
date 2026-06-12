@@ -62,6 +62,7 @@ export type Activity = {
   seoTitle?: string;
   seoMetaDescription?: string;
   h1?: string;
+  translations?: Record<string, any>;
 };
 
 export const CATEGORIES: Category[] = [

@@ -4,6 +4,7 @@ import { activitiesService } from "../services/activitiesService";
 import { ActivityCard } from "../components/ActivityCard";
 import { I } from "../components/Icon";
 import { useSEO } from "../utils/seo";
+import { useLanguage } from "../lib/languageContext";
 
 type SortKey =
   | "popular"
@@ -15,18 +16,6 @@ type SortKey =
   | "near-pigadia"
   | "near-amoopi"
   | "near-diafani";
-
-const SORT_LABELS: Record<SortKey, string> = {
-  popular: "Most popular",
-  "price-low": "Lowest price",
-  premium: "Premium / private",
-  shortest: "Shortest duration",
-  family: "Family-friendly",
-  couples: "Best for couples",
-  "near-pigadia": "Closest to Pigadia",
-  "near-amoopi": "Closest to Amoopi",
-  "near-diafani": "Closest to Diafani",
-};
 
 type Filters = {
   q: string;
@@ -61,7 +50,6 @@ const initialFilters: Filters = {
 };
 
 function durationToHours(d: string) {
-  // Try to extract approximate hours from "~3 hours", "Full day · ~9h", "45 minutes", etc.
   const m = d.match(/(\d+(\.\d+)?)\s*h/);
   if (m) return parseFloat(m[1]);
   if (/full day/i.test(d)) return 9;
@@ -85,11 +73,24 @@ function isWaterActivity(a: Activity) {
 }
 
 export function ExplorePage({ initialCategory }: { initialCategory?: Category }) {
+  const { language, t } = useLanguage();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const sortLabels: Record<SortKey, string> = {
+    popular: t("sort.popular", "Most popular"),
+    "price-low": t("sort.priceLow", "Lowest price"),
+    premium: t("sort.premium", "Premium / private"),
+    shortest: t("sort.shortest", "Shortest duration"),
+    family: t("sort.family", "Family-friendly"),
+    couples: t("sort.couples", "Best for couples"),
+    "near-pigadia": t("sort.nearPigadia", "Closest to Pigadia"),
+    "near-amoopi": t("sort.nearAmoopi", "Closest to Amoopi"),
+    "near-diafani": t("sort.nearDiafani", "Closest to Diafani"),
+  };
+
   useSEO({
-    title: "Explore Curated Activities in Karpathos | Karpathos Adventures",
+    title: t("explore.title", "All Activities") + " | Karpathos Adventures",
     description: "Search and filter 30+ curated experiences in Karpathos, Greece. Find beach boat cruises, guided mountain hikes, PADI scuba diving, and wine tastings.",
     canonicalPath: "/explore",
     schema: {
@@ -121,12 +122,18 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
       if (filters.category !== "all" && a.category !== filters.category) return false;
       if (filters.q) {
         const q = filters.q.toLowerCase();
-        const hay = (a.title + a.shortDescription + a.locationName + a.tags.join(" ")).toLowerCase();
+        const titleText = a.translations?.[language]?.title || a.title;
+        const descText = a.translations?.[language]?.shortDescription || a.shortDescription;
+        const locText = a.translations?.[language]?.locationName || a.locationName;
+        const tagText = a.tags.map(tag => t("category." + tag, tag)).join(" ");
+        const hay = (titleText + descText + locText + tagText).toLowerCase();
         if (!hay.includes(q)) return false;
       }
       if (a.fromPrice > filters.priceMax) return false;
-      if (durationToHours(a.duration) > filters.durationMax) return false;
-      if (filters.difficulty.length && !filters.difficulty.includes(a.difficulty)) return false;
+      const actDur = a.translations?.[language]?.duration || a.duration;
+      if (durationToHours(actDur) > filters.durationMax) return false;
+      const actDiff = a.translations?.[language]?.difficulty || a.difficulty;
+      if (filters.difficulty.length && !filters.difficulty.includes(actDiff)) return false;
       if (filters.familyFriendly && !a.familyFriendly) return false;
       if (filters.privateAvail && a.groupType === "group") return false;
       if (filters.pickup && !a.pickupAvailable) return false;
@@ -151,7 +158,11 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
         });
         break;
       case "shortest":
-        list = [...list].sort((a, b) => durationToHours(a.duration) - durationToHours(b.duration));
+        list = [...list].sort((a, b) => {
+          const durA = a.translations?.[language]?.duration || a.duration;
+          const durB = b.translations?.[language]?.duration || b.duration;
+          return durationToHours(durA) - durationToHours(durB);
+        });
         break;
       case "family":
         list = [...list].sort((a, b) => Number(b.familyFriendly) - Number(a.familyFriendly));
@@ -174,7 +185,7 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
         list = [...list].sort((a, b) => b.popularity - a.popularity);
     }
     return list;
-  }, [filters, sort]);
+  }, [filters, sort, activities, language]);
 
   const reset = () => setFilters({ ...initialFilters, category: filters.category });
 
@@ -184,14 +195,13 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
         {/* Header */}
         <div className="mb-6">
           <div className="text-teal text-xs font-bold uppercase tracking-widest mb-2">
-            Explore activities
+            {t("nav.explore", "Explore activities")}
           </div>
           <h1 className="font-display font-bold text-3xl sm:text-4xl text-navy">
-            All Karpathos experiences
+            {t("explore.title", "All Activities")}
           </h1>
           <p className="text-navy/70 mt-2 max-w-2xl">
-            Search, filter and sort {activities.length} curated activities — from boat days and
-            sunrise hikes to private chefs and water sports.
+            {t("explore.subtitle_desc", "Search, filter and sort curated activities — from boat days and sunrise hikes to private chefs and water sports.").replace("{count}", String(activities.length))}
           </p>
         </div>
 
@@ -203,7 +213,7 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
               type="text"
               value={filters.q}
               onChange={(e) => setFilters({ ...filters, q: e.target.value })}
-              placeholder="Search activities, beaches, villages…"
+              placeholder={t("explore.search", "Search activities, beaches, villages…")}
               className="flex-1 bg-transparent outline-none text-sm text-navy placeholder:text-navy/40"
             />
           </div>
@@ -212,7 +222,7 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
               onClick={() => setDrawerOpen(true)}
               className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-mist text-navy font-semibold text-sm hover:bg-aqua"
             >
-              <I.Filter size={16} /> Filters
+              <I.Filter size={16} /> {t("explore.filters", "Filters")}
             </button>
             <div className="relative">
               <select
@@ -220,7 +230,7 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
                 onChange={(e) => setSort(e.target.value as SortKey)}
                 className="appearance-none pl-9 pr-8 py-2.5 rounded-xl bg-mist text-navy font-semibold text-sm hover:bg-aqua cursor-pointer"
               >
-                {Object.entries(SORT_LABELS).map(([k, v]) => (
+                {Object.entries(sortLabels).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
                 ))}
               </select>
@@ -254,7 +264,7 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
           <Chip
             active={filters.category === "all"}
             onClick={() => setFilters({ ...filters, category: "all" })}
-            label={`All (${activities.length})`}
+            label={`${t("explore.filter.all", "All Categories")} (${activities.length})`}
           />
           {CATEGORIES.map((c) => {
             const count = activities.filter((a) => a.category === c).length;
@@ -263,7 +273,7 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
                 key={c}
                 active={filters.category === c}
                 onClick={() => setFilters({ ...filters, category: c })}
-                label={`${c} (${count})`}
+                label={`${t("category." + c, c)} (${count})`}
               />
             );
           })}
@@ -272,14 +282,13 @@ export function ExplorePage({ initialCategory }: { initialCategory?: Category })
         {/* Results */}
         <div className="flex items-center justify-between mb-4">
           <div className="text-sm text-navy/70">
-            <span className="font-semibold text-navy">{filtered.length}</span> experience
-            {filtered.length !== 1 ? "s" : ""}
+            <span className="font-semibold text-navy">{filtered.length}</span> {filtered.length === 1 ? t("explore.experience", "experience") : t("explore.experiences", "experiences")}
           </div>
           <button
             onClick={reset}
             className="text-xs text-teal font-semibold hover:underline"
           >
-            Reset filters
+            {t("explore.resetFilters", "Reset filters")}
           </button>
         </div>
 
@@ -328,24 +337,26 @@ function Chip({ active, onClick, label }: { active: boolean; onClick: () => void
 }
 
 function EmptyState({ onReset }: { onReset: () => void }) {
+  const { t } = useLanguage();
   return (
     <div className="text-center py-16 bg-white rounded-3xl border border-mist">
       <div className="w-14 h-14 rounded-full bg-mist text-navy flex items-center justify-center mx-auto mb-3">
         <I.Search size={22} />
       </div>
-      <h3 className="font-display font-bold text-xl text-navy">No matching activities</h3>
-      <p className="text-navy/70 text-sm mt-1">Try widening your filters or a different search.</p>
+      <h3 className="font-display font-bold text-xl text-navy">{t("explore.noMatches", "No matching activities")}</h3>
+      <p className="text-navy/70 text-sm mt-1">{t("explore.widening", "Try widening your filters or a different search.")}</p>
       <button
         onClick={onReset}
         className="mt-4 px-4 py-2 rounded-full bg-teal text-white font-semibold text-sm"
       >
-        Reset filters
+        {t("explore.resetFilters", "Reset filters")}
       </button>
     </div>
   );
 }
 
 function MapPlaceholder({ activities }: { activities: Activity[] }) {
+  const { language, t } = useLanguage();
   return (
     <div className="relative rounded-3xl overflow-hidden border border-mist bg-aqua/30 min-h-[520px] flex">
       <div className="absolute inset-0 opacity-60"
@@ -360,30 +371,33 @@ function MapPlaceholder({ activities }: { activities: Activity[] }) {
             <div className="w-12 h-12 mx-auto rounded-full bg-teal text-white flex items-center justify-center mb-3">
               <I.Map size={22} />
             </div>
-            <h3 className="font-display font-bold text-navy text-xl">Map view coming soon</h3>
+            <h3 className="font-display font-bold text-navy text-xl">{t("map.comingSoon", "Map view coming soon")}</h3>
             <p className="text-sm text-navy/70 mt-1 max-w-md mx-auto">
-              We'll plot every activity meeting point on a real Karpathos map in the next release.
-              For now, use the list below.
+              {t("map.comingSoon.desc", "We'll plot every activity meeting point on a real Karpathos map in the next release. For now, use the list below.")}
             </p>
           </div>
         </div>
         <div className="bg-white rounded-2xl border border-mist overflow-y-auto max-h-[480px]">
-          {activities.slice(0, 12).map((a) => (
-            <a
-              key={a.id}
-              href={`#/activities/${a.slug}`}
-              className="flex gap-3 p-3 border-b border-mist last:border-0 hover:bg-cream transition"
-            >
-              <img src={a.imageUrls[0]} alt={a.title} className="w-16 h-16 rounded-lg object-cover" />
-              <div className="min-w-0">
-                <div className="font-semibold text-navy text-sm truncate">{a.title}</div>
-                <div className="text-xs text-navy/60 truncate">{a.locationName}</div>
-                <div className="text-xs text-teal-dark font-bold mt-1">
-                  From {a.currency}{a.fromPrice}
+          {activities.slice(0, 12).map((a) => {
+            const actTitle = a.translations?.[language]?.title || a.title;
+            const actLoc = a.translations?.[language]?.locationName || a.locationName;
+            return (
+              <a
+                key={a.id}
+                href={`#/activities/${a.slug}`}
+                className="flex gap-3 p-3 border-b border-mist last:border-0 hover:bg-cream transition"
+              >
+                <img src={a.imageUrls[0]} alt={actTitle} className="w-16 h-16 rounded-lg object-cover" />
+                <div className="min-w-0">
+                  <div className="font-semibold text-navy text-sm truncate">{actTitle}</div>
+                  <div className="text-xs text-navy/60 truncate">{actLoc}</div>
+                  <div className="text-xs text-teal-dark font-bold mt-1">
+                    {t("activity.priceFrom", "From")} {a.currency}{a.fromPrice}
+                  </div>
                 </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -399,6 +413,7 @@ function FilterDrawer({
   setFilters: (f: Filters) => void;
   onClose: () => void;
 }) {
+  const { t } = useLanguage();
   const toggleDiff = (d: string) => {
     setFilters({
       ...filters,
@@ -412,13 +427,13 @@ function FilterDrawer({
       <div className="absolute inset-0 bg-navy/50 backdrop-blur-sm" onClick={onClose} />
       <div className="relative ml-auto w-full max-w-md bg-white h-full overflow-y-auto p-6 fade-up">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display font-bold text-xl text-navy">Filters</h3>
+          <h3 className="font-display font-bold text-xl text-navy">{t("explore.filters", "Filters")}</h3>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-mist">
             <I.Close />
           </button>
         </div>
 
-        <Section title="Max price">
+        <Section title={t("filter.maxPrice", "Max price")}>
           <input
             type="range"
             min={20}
@@ -428,10 +443,10 @@ function FilterDrawer({
             onChange={(e) => setFilters({ ...filters, priceMax: Number(e.target.value) })}
             className="w-full accent-teal"
           />
-          <div className="text-sm text-navy/80 mt-1">Up to €{filters.priceMax}</div>
+          <div className="text-sm text-navy/80 mt-1">{t("activity.priceFrom", "Up to")} €{filters.priceMax}</div>
         </Section>
 
-        <Section title="Max duration (hours)">
+        <Section title={t("filter.maxDuration", "Max duration (hours)")}>
           <input
             type="range"
             min={1}
@@ -441,10 +456,10 @@ function FilterDrawer({
             onChange={(e) => setFilters({ ...filters, durationMax: Number(e.target.value) })}
             className="w-full accent-teal"
           />
-          <div className="text-sm text-navy/80 mt-1">Up to {filters.durationMax}h</div>
+          <div className="text-sm text-navy/80 mt-1">{t("activity.priceFrom", "Up to")} {filters.durationMax}h</div>
         </Section>
 
-        <Section title="Difficulty">
+        <Section title={t("activity.difficulty", "Difficulty")}>
           <div className="flex flex-wrap gap-2">
             {["Easy", "Relaxed", "Moderate", "Challenging"].map((d) => (
               <button
@@ -462,24 +477,24 @@ function FilterDrawer({
           </div>
         </Section>
 
-        <Section title="Show only">
+        <Section title={t("filter.showOnly", "Show only")}>
           <div className="grid grid-cols-2 gap-2">
-            <Toggle label="Family-friendly" v={filters.familyFriendly} onChange={(v) => setFilters({ ...filters, familyFriendly: v })} />
-            <Toggle label="Private available" v={filters.privateAvail} onChange={(v) => setFilters({ ...filters, privateAvail: v })} />
-            <Toggle label="Pickup available" v={filters.pickup} onChange={(v) => setFilters({ ...filters, pickup: v })} />
-            <Toggle label="Water activity" v={filters.water} onChange={(v) => setFilters({ ...filters, water: v })} />
-            <Toggle label="Food included" v={filters.food} onChange={(v) => setFilters({ ...filters, food: v })} />
-            <Toggle label="Best for couples" v={filters.couples} onChange={(v) => setFilters({ ...filters, couples: v })} />
-            <Toggle label="Best for groups" v={filters.groups} onChange={(v) => setFilters({ ...filters, groups: v })} />
+            <Toggle label={t("sort.family", "Family-friendly")} v={filters.familyFriendly} onChange={(v) => setFilters({ ...filters, familyFriendly: v })} />
+            <Toggle label={t("filter.privateAvail", "Private available")} v={filters.privateAvail} onChange={(v) => setFilters({ ...filters, privateAvail: v })} />
+            <Toggle label={t("filter.pickup", "Pickup available")} v={filters.pickup} onChange={(v) => setFilters({ ...filters, pickup: v })} />
+            <Toggle label={t("filter.water", "Water activity")} v={filters.water} onChange={(v) => setFilters({ ...filters, water: v })} />
+            <Toggle label={t("filter.food", "Food included")} v={filters.food} onChange={(v) => setFilters({ ...filters, food: v })} />
+            <Toggle label={t("sort.couples", "Best for couples")} v={filters.couples} onChange={(v) => setFilters({ ...filters, couples: v })} />
+            <Toggle label={t("filter.groups", "Best for groups")} v={filters.groups} onChange={(v) => setFilters({ ...filters, groups: v })} />
           </div>
         </Section>
 
-        <Section title="Weather dependent">
+        <Section title={t("filter.weather", "Weather dependent")}>
           <div className="flex gap-2">
             {[
-              { v: null, l: "Any" },
-              { v: true, l: "Yes" },
-              { v: false, l: "No" },
+              { v: null, l: t("filter.weather.any", "Any") },
+              { v: true, l: t("filter.weather.yes", "Yes") },
+              { v: false, l: t("filter.weather.no", "No") },
             ].map((o) => (
               <button
                 key={String(o.v)}
@@ -500,7 +515,7 @@ function FilterDrawer({
           onClick={onClose}
           className="mt-6 w-full py-3 rounded-full bg-teal text-white font-semibold"
         >
-          Show results
+          {t("filter.showResults", "Show results")}
         </button>
       </div>
     </div>

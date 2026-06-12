@@ -3,6 +3,7 @@ import { I } from "./Icon";
 import { whatsappLink } from "../lib/whatsapp";
 import { bookingsService } from "../services/bookingsService";
 import { trackEvent } from "../utils/analytics";
+import { useLanguage } from "../lib/languageContext";
 
 type Props = {
   activityTitle?: string;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function InquiryForm({ activityTitle, partnerName, compact = false, title, subtitle }: Props) {
+  const { language, t } = useLanguage();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -64,10 +66,11 @@ export function InquiryForm({ activityTitle, partnerName, compact = false, title
         <div className="w-14 h-14 rounded-full bg-success/15 text-success flex items-center justify-center mx-auto mb-3">
           <I.Check size={28} />
         </div>
-        <h3 className="font-display font-bold text-xl text-navy mb-2">Inquiry received ✓</h3>
+        <h3 className="font-display font-bold text-xl text-navy mb-2">
+          {t("form.successTitle", "Inquiry received ✓")}
+        </h3>
         <p className="text-navy/70 text-sm mb-5">
-          Thanks {form.name.split(" ")[0] || "friend"} — our concierge will reply within a few hours
-          with availability and pricing.
+          {t("form.successDesc", "Thanks {name} — our concierge will reply within a few hours with availability and pricing.").replace("{name}", form.name.split(" ")[0] || "friend")}
         </p>
         <a
           href={whatsappLink(
@@ -85,7 +88,7 @@ export function InquiryForm({ activityTitle, partnerName, compact = false, title
             })
           }
         >
-          <I.Whatsapp size={16} /> Continue on WhatsApp
+          <I.Whatsapp size={16} /> {t("form.successWhatsapp", "Continue on WhatsApp")}
         </a>
       </div>
     );
@@ -102,36 +105,36 @@ export function InquiryForm({ activityTitle, partnerName, compact = false, title
       {subtitle && <p className="text-sm text-navy/70 mb-4">{subtitle}</p>}
 
       <div className="grid sm:grid-cols-2 gap-3">
-        <Field label="Your name" required>
+        <Field label={t("form.name", "Your name")} required>
           <input
             required
             type="text"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            placeholder="Maria"
+            placeholder={t("form.namePlaceholder", "Maria")}
             className="input"
           />
         </Field>
-        <Field label="Email" required>
+        <Field label={t("form.email", "Email")} required>
           <input
             required
             type="email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            placeholder="you@email.com"
+            placeholder={t("form.emailPlaceholder", "you@email.com")}
             className="input"
           />
         </Field>
-        <Field label="Phone / WhatsApp">
+        <Field label={t("form.phone", "Phone / WhatsApp")}>
           <input
             type="tel"
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
-            placeholder="+30 ..."
+            placeholder={t("form.phonePlaceholder", "+30 ...")}
             className="input"
           />
         </Field>
-        <Field label="Preferred date">
+        <Field label={t("form.preferredDate", "Preferred date")}>
           <input
             type="date"
             value={form.date}
@@ -139,7 +142,7 @@ export function InquiryForm({ activityTitle, partnerName, compact = false, title
             className="input"
           />
         </Field>
-        <Field label="Guests">
+        <Field label={t("form.guests", "Guests")}>
           <input
             type="number"
             min={1}
@@ -149,24 +152,24 @@ export function InquiryForm({ activityTitle, partnerName, compact = false, title
             className="input"
           />
         </Field>
-        <Field label="Pickup / villa area">
+        <Field label={t("form.pickup", "Pickup / villa area")}>
           <input
             type="text"
             value={form.pickup}
             onChange={(e) => setForm({ ...form, pickup: e.target.value })}
-            placeholder="e.g. Amoopi villa"
+            placeholder={t("form.pickupPlaceholder", "e.g. Amoopi villa")}
             className="input"
           />
         </Field>
       </div>
 
       <div className="mt-3">
-        <Field label="Message">
+        <Field label={t("form.message", "Message")}>
           <textarea
             rows={3}
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
-            placeholder="Anything else we should know?"
+            placeholder={t("form.messagePlaceholder", "Anything else we should know?")}
             className="input resize-none"
           />
         </Field>
@@ -181,8 +184,8 @@ export function InquiryForm({ activityTitle, partnerName, compact = false, title
           className="mt-0.5 accent-teal w-4 h-4"
         />
         <span>
-          I agree to be contacted by Karpathos Adventures about this inquiry. See our{" "}
-          <a href="#/policies/privacy" className="text-teal underline">Privacy Policy</a>.
+          {t("form.consentPart1", "I agree to be contacted by Karpathos Adventures about this inquiry. See our ")}
+          <a href="#/policies/privacy" className="text-teal underline">{t("footer.privacy", "Privacy Policy")}</a>.
         </span>
       </label>
 
@@ -197,7 +200,7 @@ export function InquiryForm({ activityTitle, partnerName, compact = false, title
         disabled={submitting}
         className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-teal text-white font-semibold hover:bg-teal-dark transition disabled:bg-teal/50"
       >
-        {submitting ? "Sending..." : "Request availability"} <I.Arrow size={16} />
+        {submitting ? t("form.sending", "Sending...") : t("form.submit", "Request availability")} <I.Arrow size={16} />
       </button>
 
       <style>{`

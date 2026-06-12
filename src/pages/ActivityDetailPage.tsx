@@ -8,8 +8,10 @@ import { whatsappLink } from "../lib/whatsapp";
 import { activitiesService } from "../services/activitiesService";
 import { useSEO } from "../utils/seo";
 import { trackEvent } from "../utils/analytics";
+import { useLanguage } from "../lib/languageContext";
 
 export function ActivityDetailPage({ slug }: { slug: string }) {
+  const { language, t } = useLanguage();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [similar, setSimilar] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,6 +58,18 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
     }
   }, [activity, slug]);
 
+  const title = activity?.translations?.[language]?.title || activity?.title;
+  const shortDescription = activity?.translations?.[language]?.shortDescription || activity?.shortDescription;
+  const fullDescription = activity?.translations?.[language]?.fullDescription || activity?.fullDescription;
+  const locationName = activity?.translations?.[language]?.locationName || activity?.locationName;
+  const meetingPoint = activity?.translations?.[language]?.meetingPoint || activity?.meetingPoint;
+  const highlights = activity?.translations?.[language]?.highlights || activity?.highlights || [];
+  const included = activity?.translations?.[language]?.included || activity?.included || [];
+  const notIncluded = activity?.translations?.[language]?.notIncluded || activity?.notIncluded || [];
+  const whatToBring = activity?.translations?.[language]?.whatToBring || activity?.whatToBring || [];
+  const duration = activity?.translations?.[language]?.duration || activity?.duration;
+  const difficulty = activity?.translations?.[language]?.difficulty || activity?.difficulty;
+
   // Breadcrumbs Schema
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -63,7 +77,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://karpathosadventures.com" },
       { "@type": "ListItem", "position": 2, "name": "Experiences", "item": "https://karpathosadventures.com/#/explore" },
-      { "@type": "ListItem", "position": 3, "name": activity?.title, "item": `https://karpathosadventures.com/#/experiences/${activity?.slug}` }
+      { "@type": "ListItem", "position": 3, "name": title, "item": `https://karpathosadventures.com/#/experiences/${activity?.slug}` }
     ]
   };
 
@@ -71,8 +85,8 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
   const touristTripSchema = activity ? {
     "@context": "https://schema.org",
     "@type": "TouristTrip",
-    "name": activity.title,
-    "description": activity.shortDescription,
+    "name": title,
+    "description": shortDescription,
     "image": activity.imageUrls?.[0],
     "provider": {
       "@type": "TravelAgency",
@@ -105,7 +119,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
           "@type": "ListItem",
           "position": 1,
           "name": "Experience start",
-          "description": `Duration: ${activity.duration}. Starts at ${activity.meetingPoint}.`
+          "description": `Duration: ${duration}. Starts at ${meetingPoint}.`
         }
       ]
     }
@@ -128,8 +142,8 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
   const combinedSchema = [breadcrumbSchema, touristTripSchema, faqSchema].filter(Boolean);
 
   useSEO({
-    title: activity ? `${activity.title} in Karpathos | Karpathos Concierge` : "Karpathos Adventures",
-    description: activity?.seoMetaDescription || activity?.shortDescription || "",
+    title: activity ? `${title} in Karpathos | Karpathos Concierge` : "Karpathos Adventures",
+    description: shortDescription || "",
     canonicalPath: activity ? `/experiences/${activity.slug}` : "",
     ogImage: activity?.imageUrls?.[0],
     schema: activity ? combinedSchema : undefined
@@ -140,9 +154,9 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
       return activity.whatsappPrefillTemplate
         .replace("[dates]", date || "[dates]")
         .replace("[number]", String(guests))
-        .replace("[area]", activity.locationName || "[area]");
+        .replace("[area]", locationName || "[area]");
     }
-    return `Hi! I'd like to book "${activity?.title}"${
+    return `Hi! I'd like to book "${title}"${
       date ? ` for ${date}` : ""
     }, ${guests} guests. Can you confirm availability?`;
   };
@@ -170,42 +184,42 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
 
   const priceLabel =
     activity.priceType === "quote"
-      ? "Price on request"
+      ? t("activity.onRequest", "On request")
       : activity.priceType === "per_group"
-      ? `From ${activity.currency}${activity.fromPrice} / group`
-      : `From ${activity.currency}${activity.fromPrice} / person`;
+      ? `${t("activity.priceFrom", "From")} ${activity.currency}${activity.fromPrice} / ${t("activity.perGroup", "per group")}`
+      : `${t("activity.priceFrom", "From")} ${activity.currency}${activity.fromPrice} / ${t("activity.perPerson", "per person")}`;
 
   return (
     <div className="pt-20 sm:pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
         <nav className="text-xs text-navy/60 mb-4">
-          <Link to="/" className="hover:text-teal">Home</Link>
+          <Link to="/" className="hover:text-teal">{t("nav.home", "Home")}</Link>
           <span className="mx-1.5">/</span>
-          <Link to="/explore" className="hover:text-teal">Explore</Link>
+          <Link to="/explore" className="hover:text-teal">{t("nav.explore", "Explore")}</Link>
           <span className="mx-1.5">/</span>
-          <span className="text-navy">{activity.title}</span>
+          <span className="text-navy">{title}</span>
         </nav>
 
         {/* Title row */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3 mb-5">
           <div>
             <div className="text-teal text-xs font-bold uppercase tracking-widest mb-1">
-              {activity.category}
+              {t("category." + activity.category, activity.category)}
             </div>
             <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-navy leading-tight">
-              {activity.title}
+              {title}
             </h1>
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-navy/70">
-              <span className="inline-flex items-center gap-1"><I.Pin size={14} /> {activity.locationName}</span>
-              <span className="inline-flex items-center gap-1"><I.Clock size={14} /> {activity.duration}</span>
-              <span className="inline-flex items-center gap-1"><I.Users size={14} /> Up to {activity.maxGuests} guests</span>
-              <span className="inline-flex items-center gap-1"><I.Mountain size={14} /> {activity.difficulty}</span>
+              <span className="inline-flex items-center gap-1"><I.Pin size={14} /> {locationName}</span>
+              <span className="inline-flex items-center gap-1"><I.Clock size={14} /> {duration}</span>
+              <span className="inline-flex items-center gap-1"><I.Users size={14} /> {t("activity.guestsMax", "Up to {count} guests").replace("{count}", String(activity.maxGuests))}</span>
+              <span className="inline-flex items-center gap-1"><I.Mountain size={14} /> {difficulty}</span>
               <span className="inline-flex items-center gap-1"><I.Calendar size={14} /> {activity.seasonStart}–{activity.seasonEnd}</span>
             </div>
           </div>
           <div className="bg-aqua/60 rounded-2xl px-4 py-3">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-teal-dark">Price</div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-teal-dark">{t("activity.priceFrom", "Price from")}</div>
             <div className="font-display font-bold text-teal-dark text-xl">{priceLabel}</div>
             {activity.priceNote && (
               <div className="text-[11px] text-navy/60">{activity.priceNote}</div>
@@ -218,7 +232,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
           <div className="relative rounded-3xl overflow-hidden bg-mist aspect-[16/10]">
             <img
               src={activity.imageUrls[activeImg]}
-              alt={activity.title}
+              alt={title}
               className="w-full h-full object-cover"
             />
             {activity.badge && (
@@ -236,7 +250,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
                   activeImg === i ? "ring-2 ring-teal" : "opacity-80 hover:opacity-100"
                 }`}
               >
-                <img src={src} alt={`${activity.title} gallery view ${i + 1}`} className="w-full h-full object-cover" />
+                <img src={src} alt={`${title} gallery view ${i + 1}`} className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
@@ -245,14 +259,14 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
         <div className="grid lg:grid-cols-[1fr_380px] gap-8 pb-16">
           {/* MAIN */}
           <div>
-            <Section title="About this experience">
-              <p className="text-navy/80 leading-relaxed text-[15px]">{activity.fullDescription}</p>
+            <Section title={t("activity.aboutThis", "About this experience")}>
+              <p className="text-navy/80 leading-relaxed text-[15px]">{fullDescription}</p>
             </Section>
 
-            {activity.highlights && activity.highlights.length > 0 && (
-              <Section title="Highlights">
+            {highlights && highlights.length > 0 && (
+              <Section title={t("activity.highlights", "Highlights")}>
                 <ul className="space-y-2">
-                  {activity.highlights.map((x) => (
+                  {highlights.map((x: string) => (
                     <li key={x} className="flex gap-2 text-sm text-navy/80">
                       <I.Sparkle size={16} className="text-teal mt-0.5 shrink-0" /> {x}
                     </li>
@@ -261,30 +275,30 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
               </Section>
             )}
 
-            <Section title="Quick facts">
+            <Section title={t("activity.quickFacts", "Quick facts")}>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <Fact icon={<I.Clock size={16} />} k="Duration" v={activity.duration} />
-                <Fact icon={<I.Users size={16} />} k="Group" v={activity.groupType === "private" ? "Private only" : activity.groupType === "both" ? "Group or private" : "Group"} />
-                <Fact icon={<I.Mountain size={16} />} k="Difficulty" v={activity.difficulty} />
-                <Fact icon={<I.Calendar size={16} />} k="Season" v={`${activity.seasonStart}–${activity.seasonEnd}`} />
-                <Fact icon={<I.Sun size={16} />} k="Weather" v={activity.weatherDependent ? "Weather dependent" : "Any weather"} />
-                <Fact icon={<I.Pin size={16} />} k="Meeting" v={activity.meetingPoint} />
+                <Fact icon={<I.Clock size={16} />} k={t("activity.duration", "Duration")} v={duration} />
+                <Fact icon={<I.Users size={16} />} k={t("activity.groupType", "Group")} v={activity.groupType === "private" ? t("activity.groupType.privateOnly", "Private only") : activity.groupType === "both" ? t("activity.groupType.groupOrPrivate", "Group or private") : t("activity.groupType.groupOnly", "Group")} />
+                <Fact icon={<I.Mountain size={16} />} k={t("activity.difficulty", "Difficulty")} v={difficulty} />
+                <Fact icon={<I.Calendar size={16} />} k={t("activity.season", "Season")} v={`${activity.seasonStart}–${activity.seasonEnd}`} />
+                <Fact icon={<I.Sun size={16} />} k={t("activity.weather", "Weather")} v={activity.weatherDependent ? t("activity.weatherDependent", "Weather-dependent") : t("activity.weather.any", "Any weather")} />
+                <Fact icon={<I.Pin size={16} />} k={t("activity.meetingPoint", "Meeting Point")} v={meetingPoint} />
               </div>
             </Section>
 
             <div className="grid sm:grid-cols-2 gap-6">
-              <Section title="What's included">
+              <Section title={t("activity.included", "What's Included")}>
                 <ul className="space-y-2">
-                  {activity.included.map((x) => (
+                  {included.map((x: string) => (
                     <li key={x} className="flex gap-2 text-sm text-navy/80">
                       <I.Check size={16} className="text-success mt-0.5 shrink-0" /> {x}
                     </li>
                   ))}
                 </ul>
               </Section>
-              <Section title="Not included">
+              <Section title={t("activity.notIncluded", "Not Included")}>
                 <ul className="space-y-2">
-                  {activity.notIncluded.map((x) => (
+                  {notIncluded.map((x: string) => (
                     <li key={x} className="flex gap-2 text-sm text-navy/70">
                       <I.X size={16} className="text-warn mt-0.5 shrink-0" /> {x}
                     </li>
@@ -294,16 +308,16 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
-              <Section title="What to bring">
+              <Section title={t("activity.whatToBring", "What to Bring")}>
                 <ul className="space-y-2">
-                  {activity.whatToBring.map((x) => (
+                  {whatToBring.map((x: string) => (
                     <li key={x} className="flex gap-2 text-sm text-navy/80">
                       <span className="w-1.5 h-1.5 rounded-full bg-teal mt-2 shrink-0" /> {x}
                     </li>
                   ))}
                 </ul>
               </Section>
-              <Section title="Safety & important notes">
+              <Section title={t("activity.safety", "Safety Notes")}>
                 <ul className="space-y-2">
                   {activity.safetyNotes.map((x) => (
                     <li key={x} className="flex gap-2 text-sm text-navy/80">
@@ -314,9 +328,9 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
               </Section>
             </div>
 
-            <Section title="Meeting point & pickup">
+            <Section title={t("activity.meetingPointPickup", "Meeting point & pickup")}>
               <p className="text-sm text-navy/80">
-                <span className="font-semibold">Meeting point:</span> {activity.meetingPoint}
+                <span className="font-semibold">{t("activity.meetingPoint", "Meeting Point")}:</span> {meetingPoint}
               </p>
               {activity.googleMapsUrl && (
                 <a
@@ -325,29 +339,28 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
                   rel="noopener noreferrer"
                   className="mt-2 inline-flex items-center gap-1.5 text-xs text-teal font-semibold hover:underline"
                 >
-                  <I.Map size={14} /> Open in Google Maps
+                  <I.Map size={14} /> {t("activity.openMaps", "Open in Google Maps")}
                 </a>
               )}
               <p className="text-sm text-navy/80 mt-2">
-                <span className="font-semibold">Pickup:</span>{" "}
+                <span className="font-semibold">{t("activity.pickup", "Pickup:")}</span>{" "}
                 {activity.pickupAvailable
-                  ? "Available on request — we can arrange villa/hotel pickup."
-                  : "Not included. Self-arrival to the meeting point."}
+                  ? t("activity.pickup.yes", "Available on request — we can arrange villa/hotel pickup.")
+                  : t("activity.pickup.no", "Not included. Self-arrival to the meeting point.")}
               </p>
             </Section>
 
-            <Section title="Cancellation & weather policy">
+            <Section title={t("activity.cancellationWeather", "Cancellation & weather policy")}>
               <p className="text-sm text-navy/80">{activity.cancellationPolicy}</p>
               {activity.weatherDependent && (
                 <p className="text-sm text-navy/70 mt-2 bg-warn/10 text-warn-darker border border-warn/30 rounded-xl p-3">
-                  <span className="font-semibold">Weather notice:</span> this experience is
-                  weather-dependent. If we have to cancel for safety, you'll be fully refunded
-                  or rescheduled.
+                  <span className="font-semibold">{t("activity.weatherNotice", "Weather notice:")}</span>{" "}
+                  {t("activity.weatherNotice.desc", "this experience is weather-dependent. If we have to cancel for safety, you'll be fully refunded or rescheduled.")}
                 </p>
               )}
             </Section>
 
-            <Section title="Operator">
+            <Section title={t("activity.operator", "Operator")}>
               <div className="flex items-center gap-3 p-4 bg-cream rounded-2xl border border-mist">
                 <div className="w-12 h-12 rounded-xl bg-teal/10 text-teal flex items-center justify-center">
                   <I.Shield size={22} />
@@ -357,15 +370,14 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
                     {activity.partnerName || "Partner-operated activity"}
                   </div>
                   <div className="text-xs text-navy/60 mt-0.5">
-                    All operators are vetted by our concierge. Insurance and licenses confirmed
-                    before each season.
+                    {t("activity.operator.vetted", "All operators are vetted by our concierge. Insurance and licenses confirmed before each season.")}
                   </div>
                 </div>
               </div>
             </Section>
 
             {activity.faqs && activity.faqs.length > 0 && (
-              <Section title="Frequently Asked Questions">
+              <Section title={t("activity.faq", "Frequently Asked Questions")}>
                 <div className="space-y-4">
                   {activity.faqs.map((faq, i) => (
                     <div key={i} className="bg-cream rounded-2xl p-4 border border-mist">
@@ -381,7 +393,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
             {similar.length > 0 && (
               <div className="mt-12">
                 <h3 className="font-display font-bold text-2xl text-navy mb-4">
-                  Similar experiences
+                  {t("activity.similar", "Similar experiences")}
                 </h3>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   {similar.map((a) => (
@@ -396,7 +408,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
           <aside className="lg:sticky lg:top-24 self-start">
             <div className="bg-white rounded-3xl border border-mist shadow-lg p-5 sm:p-6">
               <div className="text-[11px] font-bold uppercase tracking-wider text-teal-dark">
-                Request availability
+                {t("booking.title", "Request Availability")}
               </div>
               <div className="font-display font-bold text-2xl text-navy mt-1">{priceLabel}</div>
               {activity.priceNote && (
@@ -406,7 +418,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
               <div className="mt-4 grid gap-2">
                 <label className="block">
                   <span className="block text-[11px] font-semibold uppercase tracking-wider text-navy/60 mb-1">
-                    Select date
+                    {t("booking.date", "Preferred Date")}
                   </span>
                   <input
                     type="date"
@@ -417,7 +429,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
                 </label>
                 <label className="block">
                   <span className="block text-[11px] font-semibold uppercase tracking-wider text-navy/60 mb-1">
-                    Guests
+                    {t("booking.guests", "Number of Guests")}
                   </span>
                   <input
                     type="number"
@@ -435,31 +447,31 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-success text-white font-semibold hover:bg-success/90 transition"
-                onClick={() => trackEvent("whatsapp_click", { context: "activity_detail_sidebar", activity_slug: activity.slug, activity_title: activity.title })}
+                onClick={() => trackEvent("whatsapp_click", { context: "activity_detail_sidebar", activity_slug: activity.slug, activity_title: title })}
               >
-                <I.Whatsapp size={18} /> Request via WhatsApp
+                <I.Whatsapp size={18} /> {t("activity.requestWhatsapp", "Request via WhatsApp")}
               </a>
 
               <Link
                 to={`/book?activity=${activity.slug}`}
                 className="mt-2 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-navy text-white font-semibold hover:bg-navy-soft transition"
               >
-                <I.Calendar size={16} /> Request availability
+                <I.Calendar size={16} /> {t("activity.requestAvailability", "Request availability")}
               </Link>
 
               <div className="mt-4 pt-4 border-t border-mist text-xs text-navy/60 space-y-1.5">
-                <div className="flex items-center gap-1.5"><I.Check size={13} className="text-success" /> Free to inquire</div>
-                <div className="flex items-center gap-1.5"><I.Check size={13} className="text-success" /> Reply within hours</div>
-                <div className="flex items-center gap-1.5"><I.Check size={13} className="text-success" /> Local concierge support</div>
+                <div className="flex items-center gap-1.5"><I.Check size={13} className="text-success" /> {t("activity.freeInquire", "Free to inquire")}</div>
+                <div className="flex items-center gap-1.5"><I.Check size={13} className="text-success" /> {t("activity.replyWithinHours", "Reply within hours")}</div>
+                <div className="flex items-center gap-1.5"><I.Check size={13} className="text-success" /> {t("activity.conciergeSupport", "Local concierge support")}</div>
               </div>
             </div>
 
             <div id="inquiry-form" className="mt-5">
               <InquiryForm
                 compact
-                activityTitle={activity.title}
-                title="Or send an inquiry"
-                subtitle="We'll reply with availability, pricing and meeting details."
+                activityTitle={title}
+                title={t("activity.sendInquiry", "Or send an inquiry")}
+                subtitle={t("activity.inquirySubtitle", "We'll reply with availability, pricing and meeting details.")}
               />
             </div>
           </aside>
@@ -469,9 +481,9 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
       {/* Mobile sticky bar */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-mist p-3 flex gap-2 shadow-2xl">
         <div className="flex-1">
-          <div className="text-[10px] uppercase font-bold text-navy/60 tracking-wider">From</div>
+          <div className="text-[10px] uppercase font-bold text-navy/60 tracking-wider">{t("activity.priceFrom", "Price from")}</div>
           <div className="font-display font-bold text-navy">
-            {activity.priceType === "quote" ? "On request" : `${activity.currency}${activity.fromPrice}`}
+            {activity.priceType === "quote" ? t("activity.onRequest", "On request") : `${activity.currency}${activity.fromPrice}`}
           </div>
         </div>
         <a
@@ -479,7 +491,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-success text-white font-semibold text-sm"
-          onClick={() => trackEvent("whatsapp_click", { context: "activity_detail_mobile", activity_slug: activity.slug, activity_title: activity.title })}
+          onClick={() => trackEvent("whatsapp_click", { context: "activity_detail_mobile", activity_slug: activity.slug, activity_title: title })}
         >
           <I.Whatsapp size={16} /> WhatsApp
         </a>
@@ -487,7 +499,7 @@ export function ActivityDetailPage({ slug }: { slug: string }) {
           to={`/book?activity=${activity.slug}`}
           className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-teal text-white font-semibold text-sm"
         >
-          Request
+          {t("activity.book", "Request")}
         </Link>
       </div>
     </div>

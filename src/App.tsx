@@ -1,4 +1,5 @@
 import { RouterProvider, useRouter } from "./lib/router";
+import { LanguageProvider } from "./lib/languageContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { WhatsAppFab } from "./components/WhatsAppFab";
@@ -105,15 +106,17 @@ function NotFound() {
 export function App() {
   return (
     <RouterProvider>
-      <div className="min-h-screen bg-cream flex flex-col">
-        <Navbar />
-        <main className="flex-1">
-          <Router />
-        </main>
-        <Footer />
-        <WhatsAppFab />
-        <CookieBanner />
-      </div>
+      <LanguageProvider>
+        <div className="min-h-screen bg-cream flex flex-col">
+          <Navbar />
+          <main className="flex-1">
+            <Router />
+          </main>
+          <Footer />
+          <WhatsAppFab />
+          <CookieBanner />
+        </div>
+      </LanguageProvider>
     </RouterProvider>
   );
 }

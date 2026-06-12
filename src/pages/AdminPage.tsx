@@ -4,7 +4,8 @@ import { bookingsService, type Booking, type BookingStatus } from "../services/b
 import { CATEGORIES, type Activity } from "../data/activities";
 import { I } from "../components/Icon";
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { auth, storage } from "../lib/firebase";
 
 export function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,6 +53,65 @@ export function AdminPage() {
   const [includedInput, setIncludedInput] = useState("");
   const [excludedInput, setExcludedInput] = useState("");
   const [whatToBringInput, setWhatToBringInput] = useState("");
+
+  // Image Upload and Translation States
+  const [uploading, setUploading] = useState(false);
+  const [desiredFilename, setDesiredFilename] = useState("");
+  const [activeFormLang, setActiveFormLang] = useState<string>("en");
+  const [langTranslations, setLangTranslations] = useState<Record<string, {
+    title: string;
+    shortDescription: string;
+    fullDescription: string;
+    locationName: string;
+    meetingPoint: string;
+    vipHeadline: string;
+    highlights: string;
+    whatToBring: string;
+    included: string;
+    notIncluded: string;
+  }>>({
+    el: { title: "", shortDescription: "", fullDescription: "", locationName: "", meetingPoint: "", vipHeadline: "", highlights: "[]", whatToBring: "", included: "[]", notIncluded: "[]" },
+    es: { title: "", shortDescription: "", fullDescription: "", locationName: "", meetingPoint: "", vipHeadline: "", highlights: "[]", whatToBring: "", included: "[]", notIncluded: "[]" },
+    fr: { title: "", shortDescription: "", fullDescription: "", locationName: "", meetingPoint: "", vipHeadline: "", highlights: "[]", whatToBring: "", included: "[]", notIncluded: "[]" },
+    de: { title: "", shortDescription: "", fullDescription: "", locationName: "", meetingPoint: "", vipHeadline: "", highlights: "[]", whatToBring: "", included: "[]", notIncluded: "[]" }
+  });
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageIndex: 0 | 1 | 2) => {
+    const file = e.target.files?.[0];
+    if (!file || !storage) return;
+
+    setUploading(true);
+    try {
+      let filename = desiredFilename.trim().replace(/[^a-zA-Z0-9_.-]/g, "_");
+      if (!filename) {
+        filename = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9_.-]/g, "_")}`;
+      } else {
+        const ext = file.name.split('.').pop();
+        if (!filename.toLowerCase().endsWith(`.${ext.toLowerCase()}`)) {
+          filename = `${filename}.${ext}`;
+        }
+      }
+
+      const storageRef = ref(storage, `activities/${filename}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadUrl = await getDownloadURL(snapshot.ref);
+
+      if (imageIndex === 0) {
+        setPrimaryImage(downloadUrl);
+      } else if (imageIndex === 1) {
+        setExtraImage1(downloadUrl);
+      } else {
+        setExtraImage2(downloadUrl);
+      }
+      setDesiredFilename("");
+      alert(`Image successfully uploaded as activities/${filename}!`);
+    } catch (err: any) {
+      console.error("Failed to upload image:", err);
+      alert("Failed to upload image: " + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   // Check login on mount
   useEffect(() => {
@@ -275,6 +335,13 @@ export function AdminPage() {
     setExcludedInput("[\"Personal expenses\", \"Hotel transfer\"]");
     setWhatToBringInput("Comfortable clothes, water, camera");
     setFormError("");
+    setActiveFormLang("en");
+    setLangTranslations({
+      el: { title: "", shortDescription: "", fullDescription: "", locationName: "", meetingPoint: "", vipHeadline: "", highlights: "[]", whatToBring: "", included: "[]", notIncluded: "[]" },
+      es: { title: "", shortDescription: "", fullDescription: "", locationName: "", meetingPoint: "", vipHeadline: "", highlights: "[]", whatToBring: "", included: "[]", notIncluded: "[]" },
+      fr: { title: "", shortDescription: "", fullDescription: "", locationName: "", meetingPoint: "", vipHeadline: "", highlights: "[]", whatToBring: "", included: "[]", notIncluded: "[]" },
+      de: { title: "", shortDescription: "", fullDescription: "", locationName: "", meetingPoint: "", vipHeadline: "", highlights: "[]", whatToBring: "", included: "[]", notIncluded: "[]" }
+    });
     setShowModal(true);
   };
 
@@ -301,7 +368,38 @@ export function AdminPage() {
     setExcludedInput(JSON.stringify(act.notIncluded || []));
     setWhatToBringInput((act.whatToBring || []).join(", "));
     setFormError("");
+    setActiveFormLang("en");
+
+    const tx = act.translations || {};
+    const getLangVal = (l: string, field: string, fallback: any = "") => tx[l]?.[field] || fallback;
+
+    const newLangTranslations: any = {};
+    ["el", "es", "fr", "de"].forEach((l) => {
+      newLangTranslations[l] = {
+        title: getLangVal(l, "title"),
+        shortDescription: getLangVal(l, "shortDescription"),
+        fullDescription: getLangVal(l, "fullDescription"),
+        locationName: getLangVal(l, "locationName"),
+        meetingPoint: getLangVal(l, "meetingPoint"),
+        vipHeadline: getLangVal(l, "vipHeadline"),
+        highlights: JSON.stringify(getLangVal(l, "highlights", [])),
+        whatToBring: getLangVal(l, "whatToBring", []).join(", "),
+        included: JSON.stringify(getLangVal(l, "included", [])),
+        notIncluded: JSON.stringify(getLangVal(l, "notIncluded", []))
+      };
+    });
+    setLangTranslations(newLangTranslations);
     setShowModal(true);
+  };
+
+  const updateLangField = (field: string, value: string) => {
+    setLangTranslations((prev) => ({
+      ...prev,
+      [activeFormLang]: {
+        ...prev[activeFormLang],
+        [field]: value
+      }
+    }));
   };
 
   // Save Activity (Add or Edit)
@@ -326,6 +424,36 @@ export function AdminPage() {
       return;
     }
 
+    // Process all other languages
+    const parsedTranslations: Record<string, any> = {};
+    for (const l of ["el", "es", "fr", "de"]) {
+      const trans = langTranslations[l];
+      let pHigh = [];
+      let pInc = [];
+      let pExc = [];
+      try {
+        pHigh = trans.highlights ? JSON.parse(trans.highlights) : [];
+        pInc = trans.included ? JSON.parse(trans.included) : [];
+        pExc = trans.notIncluded ? JSON.parse(trans.notIncluded) : [];
+      } catch {
+        setFormError(`Translations JSON arrays for ${l.toUpperCase()} are invalid.`);
+        return;
+      }
+
+      parsedTranslations[l] = {
+        title: trans.title || title,
+        shortDescription: trans.shortDescription || shortDesc,
+        fullDescription: trans.fullDescription || fullDesc,
+        locationName: trans.locationName || area,
+        meetingPoint: trans.meetingPoint || location,
+        vipHeadline: trans.vipHeadline || vipHeadline,
+        highlights: pHigh,
+        included: pInc,
+        notIncluded: pExc,
+        whatToBring: trans.whatToBring ? trans.whatToBring.split(",").map((x: string) => x.trim()).filter(Boolean) : whatToBringInput.split(",").map((x: string) => x.trim()).filter(Boolean)
+      };
+    }
+
     const priceVal = priceFrom.toLowerCase() === 'confirm' ? 0 : parseInt(priceFrom.replace(/[^0-9]/g, "")) || 0;
     const priceType = priceFrom.toLowerCase() === 'confirm' ? "quote" : priceVal >= 150 ? "per_group" : "per_person";
 
@@ -335,7 +463,7 @@ export function AdminPage() {
 
     const whatToBring = whatToBringInput.split(",").map(x => x.trim()).filter(Boolean);
 
-    const activityData: Omit<Activity, "id"> = {
+    const activityData: Omit<Activity, "id"> & { translations: Record<string, any> } = {
       slug: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
       title,
       category,
@@ -377,7 +505,8 @@ export function AdminPage() {
       faqs: editingActivity?.faqs || [],
       ctaPrimary: "Check Availability",
       ctaSecondary: "Save Activity",
-      whatsappPrefillTemplate: `Hello, I'm interested in ${title}. My dates are [dates]...`
+      whatsappPrefillTemplate: `Hello, I'm interested in ${title}. My dates are [dates]...`,
+      translations: parsedTranslations
     };
 
     try {
@@ -847,217 +976,416 @@ VITE_FIREBASE_APP_ID=your-app-id`}
             {formError && <div className="p-3 bg-warn/10 text-warn border border-warn/20 rounded-xl mb-4 text-xs font-semibold">{formError}</div>}
 
             <form onSubmit={handleSaveActivity} className="flex-1 space-y-5">
-              {/* Row 1: Title & Category */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Title *</label>
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Saria Island Boat Tour"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Category *</label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value as any)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream outline-none cursor-pointer text-sm text-navy"
+              {/* Language Tabs for Form Editing */}
+              <div className="flex bg-cream p-1 rounded-xl border border-mist w-fit">
+                {["en", "el", "es", "fr", "de"].map((l) => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => setActiveFormLang(l)}
+                    className={`px-3 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider transition cursor-pointer ${
+                      activeFormLang === l
+                        ? "bg-teal text-white shadow-sm"
+                        : "text-navy/60 hover:text-navy"
+                    }`}
                   >
-                    {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </div>
+                    {l === "en" ? "🇬🇧 EN" : l === "el" ? "🇬🇷 EL" : l === "es" ? "🇪🇸 ES" : l === "fr" ? "🇫🇷 FR" : "🇩🇪 DE"}
+                  </button>
+                ))}
               </div>
 
-              {/* Row 2: Location & Meeting point */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Area / LocationName (e.g. Pigadia) *</label>
-                  <input
-                    type="text"
-                    value={area}
-                    onChange={(e) => setArea(e.target.value)}
-                    placeholder="Pigadia"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Meeting Point (Address/Map location) *</label>
-                  <input
-                    type="text"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="Boarding Gate B, Pigadia Harbor"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-              </div>
+              {activeFormLang === "en" ? (
+                <>
+                  {/* English Form (Full View) */}
+                  {/* Row 1: Title & Category */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Title (English) *</label>
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Saria Island Boat Tour"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Category *</label>
+                      <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value as any)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream outline-none cursor-pointer text-sm text-navy"
+                      >
+                        {CATEGORIES.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
 
-              {/* Row 3: Price & Duration & Difficulty */}
-              <div className="grid md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Price From (e.g. €45, Confirm) *</label>
-                  <input
-                    type="text"
-                    value={priceFrom}
-                    onChange={(e) => setPriceFrom(e.target.value)}
-                    placeholder="€45 or Confirm"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Duration *</label>
-                  <input
-                    type="text"
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
-                    placeholder="~3 hours"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Difficulty *</label>
-                  <input
-                    type="text"
-                    value={difficulty}
-                    onChange={(e) => setDifficulty(e.target.value)}
-                    placeholder="Easy, Moderate, Advanced"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-              </div>
+                  {/* Row 2: Location & Meeting point */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Area / LocationName (English) *</label>
+                      <input
+                        type="text"
+                        value={area}
+                        onChange={(e) => setArea(e.target.value)}
+                        placeholder="Pigadia"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Meeting Point (English) *</label>
+                      <input
+                        type="text"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder="Boarding Gate B, Pigadia Harbor"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                  </div>
 
-              {/* Row 4: Descriptions */}
-              <div>
-                <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Short Description *</label>
-                <input
-                  type="text"
-                  value={shortDesc}
-                  onChange={(e) => setShortDesc(e.target.value)}
-                  placeholder="Summarize the experience in one sentence."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                />
-              </div>
+                  {/* Row 3: Price & Duration & Difficulty */}
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Price From (e.g. €45, Confirm) *</label>
+                      <input
+                        type="text"
+                        value={priceFrom}
+                        onChange={(e) => setPriceFrom(e.target.value)}
+                        placeholder="€45 or Confirm"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Duration *</label>
+                      <input
+                        type="text"
+                        value={duration}
+                        onChange={(e) => setDuration(e.target.value)}
+                        placeholder="~3 hours"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Difficulty *</label>
+                      <input
+                        type="text"
+                        value={difficulty}
+                        onChange={(e) => setDifficulty(e.target.value)}
+                        placeholder="Easy, Moderate, Advanced"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                  </div>
 
-              <div>
-                <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Full Description *</label>
-                <textarea
-                  value={fullDesc}
-                  onChange={(e) => setFullDesc(e.target.value)}
-                  rows={4}
-                  placeholder="Provide a detailed rewrite of what guests should expect..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy resize-none"
-                />
-              </div>
+                  {/* Row 4: Descriptions */}
+                  <div>
+                    <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Short Description (English) *</label>
+                    <input
+                      type="text"
+                      value={shortDesc}
+                      onChange={(e) => setShortDesc(e.target.value)}
+                      placeholder="Summarize the experience in one sentence."
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                    />
+                  </div>
 
-              {/* Row 5: Details & Extra Fields */}
-              <div className="grid md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Operator / Partner Name</label>
-                  <input
-                    type="text"
-                    value={operator}
-                    onChange={(e) => setOperator(e.target.value)}
-                    placeholder="Art and Walk"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Google Maps URL</label>
-                  <input
-                    type="text"
-                    value={googleMapsUrl}
-                    onChange={(e) => setGoogleMapsUrl(e.target.value)}
-                    placeholder="https://google.com/maps/..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">VIP Headline / Catchphrase</label>
-                  <input
-                    type="text"
-                    value={vipHeadline}
-                    onChange={(e) => setVipHeadline(e.target.value)}
-                    placeholder="A slow, hand-made mosaic workshop"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-              </div>
+                  <div>
+                    <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Full Description (English) *</label>
+                    <textarea
+                      value={fullDesc}
+                      onChange={(e) => setFullDesc(e.target.value)}
+                      rows={4}
+                      placeholder="Provide a detailed rewrite of what guests should expect..."
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy resize-none"
+                    />
+                  </div>
 
-              {/* Row 6: Image URLs */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-0.5">Image Gallery URLs</label>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <input
-                    type="text"
-                    value={primaryImage}
-                    onChange={(e) => setPrimaryImage(e.target.value)}
-                    placeholder="Primary image URL"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                  <input
-                    type="text"
-                    value={extraImage1}
-                    onChange={(e) => setExtraImage1(e.target.value)}
-                    placeholder="Gallery image 2 URL"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                  <input
-                    type="text"
-                    value={extraImage2}
-                    onChange={(e) => setExtraImage2(e.target.value)}
-                    placeholder="Gallery image 3 URL"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
-                  />
-                </div>
-              </div>
+                  {/* Row 5: Details & Extra Fields */}
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Operator / Partner Name</label>
+                      <input
+                        type="text"
+                        value={operator}
+                        onChange={(e) => setOperator(e.target.value)}
+                        placeholder="Art and Walk"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Google Maps URL</label>
+                      <input
+                        type="text"
+                        value={googleMapsUrl}
+                        onChange={(e) => setGoogleMapsUrl(e.target.value)}
+                        placeholder="https://google.com/maps/..."
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">VIP Headline (English)</label>
+                      <input
+                        type="text"
+                        value={vipHeadline}
+                        onChange={(e) => setVipHeadline(e.target.value)}
+                        placeholder="A slow, hand-made mosaic workshop"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                  </div>
 
-              {/* Row 7: JSON Arrays & Lists */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Highlights (JSON Array) *</label>
-                  <textarea
-                    value={highlightsInput}
-                    onChange={(e) => setHighlightsInput(e.target.value)}
-                    rows={2}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">What to Bring (Comma-separated) *</label>
-                  <textarea
-                    value={whatToBringInput}
-                    onChange={(e) => setWhatToBringInput(e.target.value)}
-                    rows={2}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
-                  />
-                </div>
-              </div>
+                  {/* Row 6: Image URLs & Custom Uploads */}
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-0.5">Image Gallery URLs & Custom Uploads</label>
+                    
+                    {/* Desired Filename Field */}
+                    <div className="bg-cream/40 p-3 rounded-2xl border border-mist mb-3 flex flex-col md:flex-row md:items-center gap-3">
+                      <div className="flex-1">
+                        <label className="block text-[10px] font-bold text-navy/50 uppercase tracking-wider mb-1">Desired Filename (Optional)</label>
+                        <input
+                          type="text"
+                          value={desiredFilename}
+                          onChange={(e) => setDesiredFilename(e.target.value)}
+                          placeholder="e.g. saria_canyon_hiking (extension auto-added)"
+                          className="w-full px-3 py-1.5 rounded-lg border border-mist bg-white focus:border-teal outline-none text-xs text-navy"
+                        />
+                      </div>
+                      <div className="shrink-0 text-xs text-navy/50 mt-4 md:mt-0">
+                        {uploading ? "⏳ Uploading to Firebase..." : "👈 Set desired name first, then choose file below to upload"}
+                      </div>
+                    </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">What's Included (JSON Array) *</label>
-                  <textarea
-                    value={includedInput}
-                    onChange={(e) => setIncludedInput(e.target.value)}
-                    rows={2}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Not Included / Excluded (JSON Array) *</label>
-                  <textarea
-                    value={excludedInput}
-                    onChange={(e) => setExcludedInput(e.target.value)}
-                    rows={2}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
-                  />
-                </div>
-              </div>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {/* Primary Image */}
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold text-navy/40 uppercase">Primary Image (Image 1)</label>
+                        <input
+                          type="text"
+                          value={primaryImage}
+                          onChange={(e) => setPrimaryImage(e.target.value)}
+                          placeholder="Primary image URL"
+                          className="w-full px-3.5 py-2 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs text-navy mb-1"
+                        />
+                        {storage && (
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={uploading}
+                            onChange={(e) => handleImageUpload(e, 0)}
+                            className="text-[10px] text-navy/60 cursor-pointer w-full"
+                          />
+                        )}
+                      </div>
+                      
+                      {/* Gallery 2 */}
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold text-navy/40 uppercase">Gallery Image 2</label>
+                        <input
+                          type="text"
+                          value={extraImage1}
+                          onChange={(e) => setExtraImage1(e.target.value)}
+                          placeholder="Gallery image 2 URL"
+                          className="w-full px-3.5 py-2 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs text-navy mb-1"
+                        />
+                        {storage && (
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={uploading}
+                            onChange={(e) => handleImageUpload(e, 1)}
+                            className="text-[10px] text-navy/60 cursor-pointer w-full"
+                          />
+                        )}
+                      </div>
+
+                      {/* Gallery 3 */}
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold text-navy/40 uppercase">Gallery Image 3</label>
+                        <input
+                          type="text"
+                          value={extraImage2}
+                          onChange={(e) => setExtraImage2(e.target.value)}
+                          placeholder="Gallery image 3 URL"
+                          className="w-full px-3.5 py-2 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs text-navy mb-1"
+                        />
+                        {storage && (
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={uploading}
+                            onChange={(e) => handleImageUpload(e, 2)}
+                            className="text-[10px] text-navy/60 cursor-pointer w-full"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 7: JSON Arrays & Lists */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Highlights (JSON Array) *</label>
+                      <textarea
+                        value={highlightsInput}
+                        onChange={(e) => setHighlightsInput(e.target.value)}
+                        rows={2}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">What to Bring (Comma-separated) *</label>
+                      <textarea
+                        value={whatToBringInput}
+                        onChange={(e) => setWhatToBringInput(e.target.value)}
+                        rows={2}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">What's Included (JSON Array) *</label>
+                      <textarea
+                        value={includedInput}
+                        onChange={(e) => setIncludedInput(e.target.value)}
+                        rows={2}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Not Included / Excluded (JSON Array) *</label>
+                      <textarea
+                        value={excludedInput}
+                        onChange={(e) => setExcludedInput(e.target.value)}
+                        rows={2}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Localized Form fields */}
+                  <div className="p-3 bg-teal/10 border border-teal/20 rounded-2xl mb-4 text-xs font-semibold text-teal-dark">
+                    Translating into: <span className="uppercase font-bold">{activeFormLang}</span>. Empty fields will fall back to English values.
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Title *</label>
+                      <input
+                        type="text"
+                        value={langTranslations[activeFormLang]?.title || ""}
+                        onChange={(e) => updateLangField("title", e.target.value)}
+                        placeholder={`Translated title in ${activeFormLang}`}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Area / LocationName *</label>
+                      <input
+                        type="text"
+                        value={langTranslations[activeFormLang]?.locationName || ""}
+                        onChange={(e) => updateLangField("locationName", e.target.value)}
+                        placeholder="e.g. Πηγάδια"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Meeting Point *</label>
+                      <input
+                        type="text"
+                        value={langTranslations[activeFormLang]?.meetingPoint || ""}
+                        onChange={(e) => updateLangField("meetingPoint", e.target.value)}
+                        placeholder="Translated meeting point details"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">VIP Headline / Catchphrase</label>
+                      <input
+                        type="text"
+                        value={langTranslations[activeFormLang]?.vipHeadline || ""}
+                        onChange={(e) => updateLangField("vipHeadline", e.target.value)}
+                        placeholder="Translated VIP headline"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Short Description *</label>
+                    <input
+                      type="text"
+                      value={langTranslations[activeFormLang]?.shortDescription || ""}
+                      onChange={(e) => updateLangField("shortDescription", e.target.value)}
+                      placeholder="One sentence description"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Full Description *</label>
+                    <textarea
+                      value={langTranslations[activeFormLang]?.fullDescription || ""}
+                      onChange={(e) => updateLangField("fullDescription", e.target.value)}
+                      rows={4}
+                      placeholder="Full translated description of what to expect..."
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy resize-none"
+                    />
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Highlights (JSON Array) *</label>
+                      <textarea
+                        value={langTranslations[activeFormLang]?.highlights || "[]"}
+                        onChange={(e) => updateLangField("highlights", e.target.value)}
+                        rows={2}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">What to Bring (Comma-separated) *</label>
+                      <textarea
+                        value={langTranslations[activeFormLang]?.whatToBring || ""}
+                        onChange={(e) => updateLangField("whatToBring", e.target.value)}
+                        rows={2}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">What's Included (JSON Array) *</label>
+                      <textarea
+                        value={langTranslations[activeFormLang]?.included || "[]"}
+                        onChange={(e) => updateLangField("included", e.target.value)}
+                        rows={2}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Not Included / Excluded (JSON Array) *</label>
+                      <textarea
+                        value={langTranslations[activeFormLang]?.notIncluded || "[]"}
+                        onChange={(e) => updateLangField("notIncluded", e.target.value)}
+                        rows={2}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-xs font-mono text-navy resize-none"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
 
               {/* Form buttons */}
               <div className="flex gap-3 justify-end pt-4 border-t border-mist shrink-0">

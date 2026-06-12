@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { GUIDES } from "../data/guides";
+import { TRANSLATED_GUIDES } from "../data/guides";
 import { type Activity } from "../data/activities";
 import { activitiesService } from "../services/activitiesService";
-import { ActivityCard } from "../components/ActivityCard";
 import { Link } from "../lib/router";
 import { I } from "../components/Icon";
 import { useSEO } from "../utils/seo";
 import { trackEvent } from "../utils/analytics";
+import { useLanguage } from "../lib/languageContext";
 
 export function GuidePage({ slug }: { slug: string }) {
-  const guide = GUIDES[slug];
+  const { language, t } = useLanguage();
+  const guide = TRANSLATED_GUIDES[language]?.[slug] || TRANSLATED_GUIDES["en"][slug];
   const [activities, setActivities] = useState<Activity[]>([]);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
@@ -28,9 +29,9 @@ export function GuidePage({ slug }: { slug: string }) {
   if (!guide) {
     return (
       <div className="pt-32 pb-24 text-center max-w-xl mx-auto px-4">
-        <h1 className="font-display font-bold text-4xl text-navy">Guide not found</h1>
-        <p className="text-navy/70 mt-3">We couldn't find the guide page you are looking for.</p>
-        <Link to="/" className="mt-6 inline-block px-5 py-3 rounded-full bg-navy text-white font-semibold">Back home</Link>
+        <h1 className="font-display font-bold text-4xl text-navy">{t("booking.notFound", "Guide not found")}</h1>
+        <p className="text-navy/70 mt-3">{t("booking.notFoundDesc", "We couldn't find the guide page you are looking for.")}</p>
+        <Link to="/" className="mt-6 inline-block px-5 py-3 rounded-full bg-navy text-white font-semibold">{t("booking.backHome", "Back home")}</Link>
       </div>
     );
   }
@@ -99,14 +100,13 @@ export function GuidePage({ slug }: { slug: string }) {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": guide.faqs.map((faq) => ({
+    "mainEntity": guide.faqs.map((faq: { q: string; a: string }) => ({
       "@type": "Question",
       "name": faq.q,
       "acceptedAnswer": { "@type": "Answer", "text": faq.a }
     }))
   };
 
-  // Set page SEO metadata
   useSEO({
     title: guide.seoTitle,
     description: guide.description,
@@ -121,9 +121,9 @@ export function GuidePage({ slug }: { slug: string }) {
         
         {/* Breadcrumb links */}
         <nav className="text-xs text-navy/60 mb-4 flex items-center gap-1.5">
-          <Link to="/" className="hover:text-teal">Home</Link>
+          <Link to="/" className="hover:text-teal">{t("nav.home", "Home")}</Link>
           <span>/</span>
-          <Link to="/explore" className="hover:text-teal">Guides</Link>
+          <Link to="/explore" className="hover:text-teal">{t("guide.breadcrumbGuides", "Guides")}</Link>
           <span>/</span>
           <span className="text-navy font-medium line-clamp-1">{guide.title}</span>
         </nav>
@@ -145,10 +145,10 @@ export function GuidePage({ slug }: { slug: string }) {
             {guide.toc && guide.toc.length > 0 && (
               <div className="bg-cream rounded-2xl p-5 border border-mist mb-6">
                 <div className="font-display font-bold text-navy text-sm uppercase tracking-wider mb-3">
-                  Table of Contents
+                  {t("guide.toc", "Table of Contents")}
                 </div>
                 <ul className="space-y-2 text-sm text-teal-dark font-medium">
-                  {guide.toc.map((item, idx) => (
+                  {guide.toc.map((item: string, idx: number) => (
                     <li key={idx} className="flex items-center gap-2">
                       <span className="text-teal">•</span>
                       <span>{item}</span>
@@ -165,7 +165,7 @@ export function GuidePage({ slug }: { slug: string }) {
 
             {/* Sections */}
             <div className="space-y-8 mt-6">
-              {guide.sections.map((sec, idx) => (
+              {guide.sections.map((sec: { heading: string; text: string; list?: string[] }, idx: number) => (
                 <section key={idx} className="border-t border-mist/60 pt-6 first:border-0 first:pt-0">
                   <h2 className="font-display font-bold text-xl sm:text-2xl text-navy mb-3">
                     {sec.heading}
@@ -175,7 +175,7 @@ export function GuidePage({ slug }: { slug: string }) {
                   </p>
                   {sec.list && sec.list.length > 0 && (
                     <ul className="mt-3 space-y-1.5 pl-5 list-disc text-sm text-navy/70">
-                      {sec.list.map((item, lIdx) => (
+                      {sec.list.map((item: string, lIdx: number) => (
                         <li key={lIdx}>{item}</li>
                       ))}
                     </ul>
@@ -188,10 +188,10 @@ export function GuidePage({ slug }: { slug: string }) {
             {guide.faqs && guide.faqs.length > 0 && (
               <div className="border-t border-mist/80 mt-10 pt-8">
                 <h2 className="font-display font-bold text-2xl text-navy mb-6">
-                  Frequently Asked Questions
+                  {t("activity.faq", "Frequently Asked Questions")}
                 </h2>
                 <div className="space-y-3">
-                  {guide.faqs.map((faq, idx) => (
+                  {guide.faqs.map((faq: { q: string; a: string }, idx: number) => (
                     <div key={idx} className="bg-cream rounded-xl border border-mist overflow-hidden">
                       <button
                         onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
@@ -220,9 +220,9 @@ export function GuidePage({ slug }: { slug: string }) {
               <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center mb-4 text-white">
                 <I.Whatsapp size={20} />
               </div>
-              <h3 className="font-display font-bold text-lg leading-tight">Need a custom plan?</h3>
+              <h3 className="font-display font-bold text-lg leading-tight">{t("guide.customPlan", "Need a custom plan?")}</h3>
               <p className="text-white/80 text-xs mt-2 leading-relaxed">
-                Connect with our local concierge via WhatsApp. We organize tailor-made itineraries, private villa pickups, transfers, and custom group events.
+                {t("guide.customPlanDesc", "Connect with our local concierge via WhatsApp. We organize tailor-made itineraries, private villa pickups, transfers, and custom group events.")}
               </p>
               <a
                 href="https://wa.me/306943666243?text=Hi!%20I%20am%20reading%20your%20guides%20and%20would%20like%20to%20plan%20a%20custom%20itinerary%20in%20Karpathos."
@@ -231,51 +231,57 @@ export function GuidePage({ slug }: { slug: string }) {
                 className="mt-4 w-full py-2.5 rounded-full bg-success text-white font-semibold text-xs flex items-center justify-center gap-1.5 hover:bg-success/90 transition shadow-sm"
                 onClick={() => trackEvent("whatsapp_click", { context: "guide_page_sidebar", guide_slug: slug })}
               >
-                <I.Whatsapp size={14} /> Plan on WhatsApp
+                <I.Whatsapp size={14} /> {t("guide.planWhatsapp", "Plan on WhatsApp")}
               </a>
             </div>
 
             {/* Related Experiences */}
             <div className="bg-white rounded-3xl border border-mist p-5 shadow-sm">
               <h3 className="font-display font-bold text-navy text-sm uppercase tracking-wider mb-4 border-b border-mist pb-2">
-                Bookable Activities
+                {t("guide.bookableTitle", "Bookable Activities")}
               </h3>
               <div className="space-y-4">
-                {relatedActivities.map((act) => (
-                  <div key={act.id} className="group flex gap-3 border-b border-mist/55 pb-3 last:border-0 last:pb-0">
-                    <div className="w-16 h-12 rounded-lg overflow-hidden bg-mist shrink-0">
-                      <img src={act.imageUrls[0]} alt={act.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <Link to={`/experiences/${act.slug}`} className="font-display font-bold text-xs text-navy group-hover:text-teal transition-colors line-clamp-1">
-                        {act.title}
-                      </Link>
-                      <div className="text-[10px] text-teal mt-0.5 font-semibold">
-                        {act.priceType === "quote" ? "On request" : `From €${act.fromPrice}`}
+                {relatedActivities.map((act) => {
+                  const actTitle = act.translations?.[language]?.title || act.title;
+                  return (
+                    <div key={act.id} className="group flex gap-3 border-b border-mist/55 pb-3 last:border-0 last:pb-0">
+                      <div className="w-16 h-12 rounded-lg overflow-hidden bg-mist shrink-0">
+                        <img src={act.imageUrls[0]} alt={actTitle} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <Link to={`/experiences/${act.slug}`} className="font-display font-bold text-xs text-navy group-hover:text-teal transition-colors line-clamp-1">
+                          {actTitle}
+                        </Link>
+                        <div className="text-[10px] text-teal mt-0.5 font-semibold">
+                          {act.priceType === "quote" ? t("activity.onRequest", "On request") : `${t("activity.priceFrom", "From")} €${act.fromPrice}`}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
             {/* More Guides navigation */}
             <div className="bg-white rounded-3xl border border-mist p-5 shadow-sm">
               <h3 className="font-display font-bold text-navy text-sm uppercase tracking-wider mb-3 border-b border-mist pb-2">
-                Popular Guides
+                {t("guide.popularGuides", "Popular Guides")}
               </h3>
               <ul className="space-y-2 text-xs text-navy/70">
-                {Object.values(GUIDES)
-                  .filter((g) => g.slug !== slug)
+                {Object.keys(TRANSLATED_GUIDES["en"])
+                  .filter((gSlug) => gSlug !== slug)
                   .slice(0, 6)
-                  .map((g) => (
-                    <li key={g.slug}>
-                      <Link to={`/guides/${g.slug}`} className="hover:text-teal font-medium flex items-center gap-1">
-                        <span className="text-teal">•</span>
-                        <span className="line-clamp-1">{g.seoTitle.split(" | ")[0]}</span>
-                      </Link>
-                    </li>
-                  ))}
+                  .map((gSlug) => {
+                    const g = TRANSLATED_GUIDES[language]?.[gSlug] || TRANSLATED_GUIDES["en"][gSlug];
+                    return (
+                      <li key={gSlug}>
+                        <Link to={`/guides/${gSlug}`} className="hover:text-teal font-medium flex items-center gap-1">
+                          <span className="text-teal">•</span>
+                          <span className="line-clamp-1">{g.seoTitle.split(" | ")[0]}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
               </ul>
             </div>
           </aside>

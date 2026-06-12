@@ -1,26 +1,39 @@
 import { useEffect, useState } from "react";
 import { Link, useRouter } from "../lib/router";
 import { I } from "./Icon";
-
-const NAV = [
-  { label: "Home", to: "/" },
-  { label: "Explore", to: "/explore" },
-  { label: "Boat Trips", to: "/category/sea-boat-trips" },
-  { label: "Hikes", to: "/category/hiking-tours" },
-  { label: "Adventure", to: "/category/adventure-watersports" },
-  { label: "Food & Wine", to: "/category/food-wine-tastings" },
-  { label: "Workshops", to: "/category/workshops-local-craft" },
-  { label: "Wellness", to: "/category/wellness-massage" },
-  { label: "About", to: "/about" },
-];
+import { useLanguage, type Language } from "../lib/languageContext";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showLangDropdown, setShowLangDropdown] = useState(false);
   const { path } = useRouter();
+  const { language, setLanguage, t } = useLanguage();
 
   const isHome = path === "/" || path === "";
   const isSolid = scrolled || open || !isHome;
+
+  const NAV = [
+    { label: t("nav.home", "Home"), to: "/" },
+    { label: t("nav.explore", "Explore"), to: "/explore" },
+    { label: t("nav.boatTrips", "Boat Trips"), to: "/category/sea-boat-trips" },
+    { label: t("nav.hikes", "Hikes"), to: "/category/hiking-tours" },
+    { label: t("nav.adventure", "Adventure"), to: "/category/adventure-watersports" },
+    { label: t("nav.foodWine", "Food & Wine"), to: "/category/food-wine-tastings" },
+    { label: t("nav.workshops", "Workshops"), to: "/category/workshops-local-craft" },
+    { label: t("nav.wellness", "Wellness"), to: "/category/wellness-massage" },
+    { label: t("nav.about", "About"), to: "/about" },
+  ];
+
+  const languages: { code: Language; name: string; flag: string }[] = [
+    { code: "en", name: "English", flag: "🇬🇧" },
+    { code: "el", name: "Ελληνικά", flag: "🇬🇷" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
+    { code: "de", name: "Deutsch", flag: "🇩🇪" },
+  ];
+
+  const currentLangObj = languages.find(l => l.code === language) || languages[0];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -29,7 +42,17 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setOpen(false), [path]);
+  useEffect(() => {
+    setOpen(false);
+    setShowLangDropdown(false);
+  }, [path]);
+
+  useEffect(() => {
+    if (!showLangDropdown) return;
+    const clickAway = () => setShowLangDropdown(false);
+    window.addEventListener("click", clickAway);
+    return () => window.removeEventListener("click", clickAway);
+  }, [showLangDropdown]);
 
   return (
     <header
@@ -87,7 +110,43 @@ export function Navbar() {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            {/* Language Selector Dropdown */}
+            <div className="relative" onClick={(e) => e.stopPropagation()}>
+              <button
+                onClick={() => setShowLangDropdown(!showLangDropdown)}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer border ${
+                  isSolid
+                    ? "bg-cream text-navy hover:bg-mist border-mist"
+                    : "bg-white/10 text-white hover:bg-white/20 border-white/10"
+                }`}
+              >
+                <span>{currentLangObj.flag}</span>
+                <span className="uppercase hidden md:inline text-xs">{currentLangObj.code}</span>
+                <I.ChevronDown size={14} className="opacity-70" />
+              </button>
+              
+              {showLangDropdown && (
+                <div className="absolute right-0 mt-2 w-36 bg-white rounded-2xl border border-mist shadow-lg py-1.5 z-50">
+                  {languages.map((l) => (
+                    <button
+                      key={l.code}
+                      onClick={() => {
+                        setLanguage(l.code);
+                        setShowLangDropdown(false);
+                      }}
+                      className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2.5 transition-colors cursor-pointer hover:bg-cream ${
+                        language === l.code ? "text-teal font-bold bg-aqua/30" : "text-navy"
+                      }`}
+                    >
+                      <span>{l.flag}</span>
+                      <span>{l.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <Link
               to="/contact"
               className={`hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
@@ -97,7 +156,7 @@ export function Navbar() {
               }`}
             >
               <I.Whatsapp size={16} />
-              Concierge
+              {t("nav.concierge", "Concierge")}
             </Link>
             <button
               onClick={() => setOpen((o) => !o)}
@@ -126,7 +185,7 @@ export function Navbar() {
               to="/contact"
               className="px-3 py-3 rounded-lg bg-teal text-white font-semibold mt-1 flex items-center gap-2"
             >
-              <I.Whatsapp size={16} /> WhatsApp Concierge
+              <I.Whatsapp size={16} /> {t("nav.concierge", "Concierge")}
             </Link>
           </nav>
         )}

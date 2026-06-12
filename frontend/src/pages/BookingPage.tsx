@@ -6,17 +6,13 @@ import { bookingsService } from "../services/bookingsService";
 import { I } from "../components/Icon";
 import { useSEO } from "../utils/seo";
 import { trackEvent } from "../utils/analytics";
+import { useLanguage } from "../lib/languageContext";
 
 export function BookingPage() {
   const { path } = useRouter();
+  const { language, t } = useLanguage();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState(true);
-
-  useSEO({
-    title: activity ? `Book ${activity.title} | Karpathos Concierge` : "Request Availability | Karpathos Concierge",
-    description: "Submit your details and requested date, and our local concierge team will coordinate with the activity supplier to confirm availability.",
-    canonicalPath: "/book"
-  });
 
   // Form states
   const [clientName, setClientName] = useState("");
@@ -30,8 +26,18 @@ export function BookingPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  const actTitle = activity?.translations?.[language]?.title || activity?.title || "Custom Concierge Request";
+  const actLoc = activity?.translations?.[language]?.locationName || activity?.locationName || "";
+  const actDur = activity?.translations?.[language]?.duration || activity?.duration || "";
+  const actDiff = activity?.translations?.[language]?.difficulty || activity?.difficulty || "";
+
+  useSEO({
+    title: activity ? `${t("booking.title", "Book")} ${actTitle} | ${t("nav.concierge", "Karpathos Concierge")}` : `${t("booking.title", "Request Availability")} | ${t("nav.concierge", "Karpathos Concierge")}`,
+    description: t("booking.metaDescription", "Submit your details and requested date, and our local concierge team will coordinate with the activity supplier to confirm availability."),
+    canonicalPath: "/book"
+  });
+
   // Extract activity slug from URL query
-  // Example hash: #/book?activity=private-style-honey-and-beekeeping-experience-karpathos
   useEffect(() => {
     const queryStr = window.location.hash.includes("?") 
       ? window.location.hash.split("?")[1] 
@@ -61,7 +67,7 @@ export function BookingPage() {
     setError("");
 
     if (!clientName || !clientEmail || !clientPhone || !bookingDate) {
-      setError("Please fill in all required fields.");
+      setError(t("form.fillRequired", "Please fill in all required fields."));
       return;
     }
 
@@ -85,7 +91,7 @@ export function BookingPage() {
       });
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message || "Failed to submit booking request. Please try again.");
+      setError(err.message || t("form.submitError", "Failed to submit booking request. Please try again."));
     } finally {
       setSubmitting(false);
     }
@@ -95,7 +101,7 @@ export function BookingPage() {
     return (
       <div className="pt-32 pb-24 text-center max-w-xl mx-auto px-4 flex flex-col items-center justify-center min-h-[50vh]">
         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-teal mb-4"></div>
-        <p className="text-navy/70">Loading activity details...</p>
+        <p className="text-navy/70">{t("booking.loading", "Loading activity details...")}</p>
       </div>
     );
   }
@@ -107,22 +113,23 @@ export function BookingPage() {
           <I.Check size={32} />
         </div>
         <h1 className="font-display font-extrabold text-3xl sm:text-4xl text-navy leading-tight">
-          Request Submitted!
+          {t("booking.successTitle", "Request Submitted!")}
         </h1>
         <p className="text-navy/75 mt-4 text-base leading-relaxed max-w-md">
-          Thank you, <span className="font-semibold text-navy">{clientName}</span>. Your request for 
-          <span className="font-semibold text-teal-dark"> "{activity?.title || "Karpathos Concierge"}"</span> on 
-          <span className="font-semibold text-navy"> {bookingDate}</span> is now processing.
+          {t("booking.successDesc", "Thank you, {name}. Your request for \"{title}\" on {date} is now processing.")
+            .replace("{name}", clientName)
+            .replace("{title}", actTitle)
+            .replace("{date}", bookingDate)}
         </p>
         <p className="text-navy/60 mt-2 text-sm max-w-sm">
-          Our team will verify availability with the local supplier and contact you via email or WhatsApp within the next few hours.
+          {t("booking.successSub", "Our team will verify availability with the local supplier and contact you via email or WhatsApp within the next few hours.")}
         </p>
         <div className="mt-8 flex gap-3 justify-center">
           <Link to="/" className="px-5 py-3 rounded-full bg-navy hover:bg-navy-soft text-white font-semibold shadow-md transition">
-            Back Home
+            {t("booking.backHome", "Back Home")}
           </Link>
           <Link to="/explore" className="px-5 py-3 rounded-full bg-teal hover:bg-teal-dark text-white font-semibold shadow-md transition">
-            Browse More
+            {t("booking.browseMore", "Browse More")}
           </Link>
         </div>
       </div>
@@ -136,8 +143,12 @@ export function BookingPage() {
           
           {/* Main Booking Form */}
           <div className="p-6 sm:p-8">
-            <h1 className="font-display font-bold text-2xl sm:text-3xl text-navy">Request Availability</h1>
-            <p className="text-sm text-navy/60 mt-1">Submit your desired dates and details, and our team will coordinate with the supplier.</p>
+            <h1 className="font-display font-bold text-2xl sm:text-3xl text-navy">
+              {t("booking.title", "Request Availability")}
+            </h1>
+            <p className="text-sm text-navy/60 mt-1">
+              {t("booking.subtitle_desc", "Submit your desired dates and details, and our team will coordinate with the supplier.")}
+            </p>
             
             {error && (
               <div className="mt-4 p-3 bg-warn/10 text-warn border border-warn/20 rounded-xl text-xs font-semibold">
@@ -148,7 +159,9 @@ export function BookingPage() {
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Your Full Name *</label>
+                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">
+                    {t("booking.name", "Your Full Name")} *
+                  </label>
                   <input
                     type="text"
                     required
@@ -159,7 +172,9 @@ export function BookingPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Contact Email *</label>
+                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">
+                    {t("booking.email", "Contact Email")} *
+                  </label>
                   <input
                     type="email"
                     required
@@ -173,7 +188,9 @@ export function BookingPage() {
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Phone Number (with WhatsApp) *</label>
+                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">
+                    {t("booking.phone", "Phone Number (with WhatsApp)")} *
+                  </label>
                   <input
                     type="tel"
                     required
@@ -184,7 +201,9 @@ export function BookingPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Preferred Date *</label>
+                  <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">
+                    {t("booking.date", "Preferred Date")} *
+                  </label>
                   <input
                     type="date"
                     required
@@ -196,7 +215,9 @@ export function BookingPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Number of Guests</label>
+                <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">
+                  {t("booking.guests", "Number of Guests")}
+                </label>
                 <input
                   type="number"
                   min={1}
@@ -206,12 +227,16 @@ export function BookingPage() {
                   className="w-full px-3.5 py-2.5 rounded-xl border border-mist bg-cream focus:bg-white focus:border-teal outline-none text-sm text-navy"
                 />
                 {activity?.maxGuests && (
-                  <span className="text-[10px] text-navy/50 mt-1 block">Maximum capacity for this activity is {activity.maxGuests} guests.</span>
+                  <span className="text-[10px] text-navy/50 mt-1 block">
+                    {t("booking.maxGuestsNote", "Maximum capacity for this activity is {count} guests.").replace("{count}", String(activity.maxGuests))}
+                  </span>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">Special requests or questions</label>
+                <label className="block text-xs font-bold text-navy/60 uppercase tracking-wider mb-1">
+                  {t("booking.notes", "Special requests or questions")}
+                </label>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
@@ -226,7 +251,7 @@ export function BookingPage() {
                 disabled={submitting}
                 className="mt-2 w-full py-3.5 rounded-full bg-teal hover:bg-teal-dark text-white font-semibold shadow-md transition disabled:bg-teal/50"
               >
-                {submitting ? "Submitting Request..." : "Submit Inquiry"}
+                {submitting ? t("booking.submitting", "Submitting Request...") : t("booking.submit", "Submit Inquiry")}
               </button>
             </form>
           </div>
@@ -236,21 +261,25 @@ export function BookingPage() {
             {activity ? (
               <div>
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-mist mb-4">
-                  <img src={activity.imageUrls[0]} alt={activity.title} className="w-full h-full object-cover" />
+                  <img src={activity.imageUrls[0]} alt={actTitle} className="w-full h-full object-cover" />
                 </div>
-                <div className="text-[10px] font-bold text-teal uppercase tracking-widest">{activity.category}</div>
-                <h3 className="font-display font-bold text-navy text-lg leading-tight mt-1">{activity.title}</h3>
+                <div className="text-[10px] font-bold text-teal uppercase tracking-widest">
+                  {t("category." + activity.category, activity.category)}
+                </div>
+                <h3 className="font-display font-bold text-navy text-lg leading-tight mt-1">{actTitle}</h3>
                 
                 <div className="mt-4 space-y-2 text-xs text-navy/75">
-                  <div className="flex items-center gap-2"><I.Pin size={13} className="text-teal" /> {activity.locationName}</div>
-                  <div className="flex items-center gap-2"><I.Clock size={13} className="text-teal" /> {activity.duration}</div>
-                  <div className="flex items-center gap-2"><I.Mountain size={13} className="text-teal" /> {activity.difficulty}</div>
+                  <div className="flex items-center gap-2"><I.Pin size={13} className="text-teal" /> {actLoc}</div>
+                  <div className="flex items-center gap-2"><I.Clock size={13} className="text-teal" /> {actDur}</div>
+                  <div className="flex items-center gap-2"><I.Mountain size={13} className="text-teal" /> {actDiff}</div>
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-mist/60">
-                  <div className="text-[10px] uppercase font-bold text-navy/55 tracking-wider">Starting Price</div>
+                  <div className="text-[10px] uppercase font-bold text-navy/55 tracking-wider">
+                    {t("booking.startingPrice", "Starting Price")}
+                  </div>
                   <div className="font-display font-bold text-teal-dark text-xl mt-0.5">
-                    {activity.priceType === "quote" ? "On request" : `€${activity.fromPrice}`}
+                    {activity.priceType === "quote" ? t("activity.onRequest", "On request") : `€${activity.fromPrice}`}
                   </div>
                   {activity.priceNote && (
                     <div className="text-[10px] text-navy/50 mt-0.5">{activity.priceNote}</div>
@@ -262,17 +291,19 @@ export function BookingPage() {
                 <div className="w-12 h-12 rounded-xl bg-teal/10 text-teal flex items-center justify-center mb-4">
                   <I.Sparkle size={22} />
                 </div>
-                <h3 className="font-display font-bold text-navy text-lg leading-tight">Custom Plan Request</h3>
+                <h3 className="font-display font-bold text-navy text-lg leading-tight">
+                  {t("booking.customRequestTitle", "Custom Plan Request")}
+                </h3>
                 <p className="text-xs text-navy/70 mt-2 leading-relaxed">
-                  Send details of what you'd like to do, and our concierge concierge will build a custom itinerary matching your dates.
+                  {t("booking.customRequestDesc", "Send details of what you'd like to do, and our concierge will build a custom itinerary matching your dates.")}
                 </p>
               </div>
             )}
 
             <div className="pt-6 border-t border-mist/60 mt-6 text-[11px] text-navy/50 space-y-1">
-              <div>🛡️ Safe & Vetted Partners</div>
-              <div>⚡ Reply in under 4 Hours</div>
-              <div>💬 Easy modifications via WhatsApp</div>
+              <div>{t("booking.vetted", "🛡️ Safe & Vetted Partners")}</div>
+              <div>{t("booking.replyTime", "⚡ Reply in under 4 Hours")}</div>
+              <div>{t("booking.modify", "💬 Easy modifications via WhatsApp")}</div>
             </div>
           </div>
 
