@@ -1,0 +1,13 @@
+{
+  "name": "karpathos-workspace",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Karpathos Adventures Workspace consisting of frontend, admin, backend, and mobile apps.",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:admin": "cd admin && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "build:admin": "cd admin && npm run build",
+    "start:mobile": "cd mobile && npm run start"
+  }
+}

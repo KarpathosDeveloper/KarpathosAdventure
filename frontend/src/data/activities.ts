@@ -1,0 +1,3821 @@
+export type Category =
+  | "Adventure & Watersports"
+  | "Culture & Village Tours"
+  | "Fitness & Lifestyle"
+  | "Food & Wine Tastings"
+  | "Hiking Tours"
+  | "Sea & Boat Trips"
+  | "Watersports & Diving"
+  | "Wellness & Massage"
+  | "Workshops & Local Craft"
+  | "Private Villa Experiences"; // Keep for backward compatibility
+
+export type Activity = {
+  id: string;
+  slug: string;
+  title: string;
+  category: Category;
+  subcategory?: string;
+  shortDescription: string;
+  fullDescription: string;
+  locationName: string;
+  meetingPoint: string;
+  fromPrice: number;
+  currency: string;
+  priceType: "per_person" | "per_group" | "quote";
+  priceNote?: string;
+  duration: string;
+  difficulty: string;
+  groupType: "group" | "private" | "both";
+  maxGuests: number;
+  seasonStart: string;
+  seasonEnd: string;
+  imageUrls: string[];
+  tags: string[];
+  included: string[];
+  notIncluded: string[];
+  whatToBring: string[];
+  safetyNotes: string[];
+  cancellationPolicy: string;
+  weatherDependent: boolean;
+  pickupAvailable: boolean;
+  foodIncluded: boolean;
+  familyFriendly: boolean;
+  bestForCouples?: boolean;
+  bestForGroups?: boolean;
+  partnerName?: string;
+  closestTo: string[];
+  popularity: number;
+  badge?: string | null;
+  // Enhanced metadata fields from CSV
+  operator?: string;
+  mapQuery?: string;
+  googleMapsUrl?: string;
+  bestFor?: string[];
+  vipHeadline?: string;
+  highlights?: string[];
+  bookingNotes?: string;
+  faqs?: { q: string; a: string }[];
+  ctaPrimary?: string;
+  ctaSecondary?: string;
+  whatsappPrefillTemplate?: string;
+  seoTitle?: string;
+  seoMetaDescription?: string;
+  h1?: string;
+};
+
+export const CATEGORIES: Category[] = [
+  "Adventure & Watersports",
+  "Culture & Village Tours",
+  "Fitness & Lifestyle",
+  "Food & Wine Tastings",
+  "Hiking Tours",
+  "Sea & Boat Trips",
+  "Watersports & Diving",
+  "Wellness & Massage",
+  "Workshops & Local Craft",
+];
+
+export const CATEGORY_IMAGES: Record<Category, string> = {
+  "Adventure & Watersports": "https://images.pexels.com/photos/12376921/pexels-photo-12376921.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Culture & Village Tours": "https://images.pexels.com/photos/37037773/pexels-photo-37037773.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Fitness & Lifestyle": "https://images.pexels.com/photos/32737290/pexels-photo-32737290.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Food & Wine Tastings": "https://images.pexels.com/photos/8472735/pexels-photo-8472735.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Hiking Tours": "https://images.pexels.com/photos/31846705/pexels-photo-31846705.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Sea & Boat Trips": "https://images.pexels.com/photos/37037802/pexels-photo-37037802.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Watersports & Diving": "https://images.pexels.com/photos/13010778/pexels-photo-13010778.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Wellness & Massage": "https://images.pexels.com/photos/34777293/pexels-photo-34777293.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Workshops & Local Craft": "https://images.pexels.com/photos/30630904/pexels-photo-30630904.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+  "Private Villa Experiences": "https://images.pexels.com/photos/34777293/pexels-photo-34777293.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+};
+
+export const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
+  "Adventure & Watersports": "Windsurfing, wing foiling, mountain biking and rock climbing.",
+  "Culture & Village Tours": "Traditional Olympos, sunset village walks and day trips.",
+  "Fitness & Lifestyle": "Active training and gym passes in Pigadia.",
+  "Food & Wine Tastings": "Local family winery tours, honey tastings, and cooking lessons.",
+  "Hiking Tours": "Panoramic summits, chapel walks, and hidden valleys.",
+  "Sea & Boat Trips": "Glass-bottom boats, beach cruises, and Saria excursions.",
+  "Watersports & Diving": "Speedboat snorkeling, beginner PADI scuba, and advanced diving.",
+  "Wellness & Massage": "Yoga sessions, sound healing, and therapeutic spa massages.",
+  "Workshops & Local Craft": "Pebble art, creative mosaic, and clay workshops.",
+  "Private Villa Experiences": "Concierge custom experiences.",
+};
+
+export const ACTIVITIES: Activity[] = [
+  {
+    "id": "exp_001",
+    "slug": "private-style-honey-and-beekeeping-experience-karpathos",
+    "title": "Private-Style Honey & Beekeeping Experience",
+    "category": "Food & Wine Tastings",
+    "shortDescription": "A relaxed introduction to Karpathian beekeeping and local honey flavors.",
+    "fullDescription": "A gentle, sensory local experience for guests who prefer authenticity over crowds. It works beautifully before lunch, after a beach morning, or as part of a local-taste itinerary.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Pigadia",
+    "fromPrice": 10,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm tasting format, meeting point, capacity, language, and product-purchase options.",
+    "duration": "~45 minutes",
+    "difficulty": "Easy",
+    "groupType": "private",
+    "maxGuests": 8,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1691451147",
+      "https://karpathostravel.com/wp-content/uploads/2025/07/karpathos-travel-tui-gergatsoulis-honey-bee-keeping-park-2025.jpg",
+      "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/0f/41/7e/6b.jpg"
+    ],
+    "tags": [
+      "Food & Wine Tastings",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable clothes",
+      "camera",
+      "water",
+      "and cash/card if guests want to buy products."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": true,
+    "familyFriendly": true,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Gergatsoulis Honey",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 100,
+    "badge": null,
+    "operator": "Gergatsoulis Honey",
+    "mapQuery": "Pigadia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Karpathos",
+    "bestFor": [
+      "Families",
+      "Couples",
+      "Slow travel",
+      "Local culture",
+      "Villa guests"
+    ],
+    "vipHeadline": "A quiet taste of Karpathos through its golden island honey.",
+    "highlights": [
+      "Local honey producer experience",
+      "Short and easy for all ages",
+      "Strong authentic local flavor",
+      "Good add-on to village or food day"
+    ],
+    "bookingNotes": "Confirm tasting format, meeting point, capacity, language, and product-purchase options.",
+    "faqs": [
+      {
+        "q": "Is Private-Style Honey & Beekeeping Experience suitable for families?",
+        "a": "It is best for Families, Couples, Slow travel, Local culture, Villa guests. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Private-Style Honey & Beekeeping Experience take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Private-Style Honey & Beekeeping Experience?",
+        "a": "Comfortable clothes, camera, water, and cash/card if guests want to buy products."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Private-Style Honey & Beekeeping Experience. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Private-Style Honey & Beekeeping Experience in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Private-Style Honey & Beekeeping Experience in Karpathos. View price from \u20ac10, duration ~45 minutes, area Pigadia, what to expect, and request availability.",
+    "h1": "Private-Style Honey & Beekeeping Experience in Karpathos"
+  },
+  {
+    "id": "exp_002",
+    "slug": "scarpanto-wine-tasting-experience-karpathos",
+    "title": "Scarpanto Wine Tasting Experience",
+    "category": "Food & Wine Tastings",
+    "shortDescription": "A relaxed winery tasting for guests who want to discover local flavors in an elegant setting.",
+    "fullDescription": "A simple and highly attractive pre-dinner or slow-afternoon activity for guests who enjoy wine, culture, and local craftsmanship.",
+    "locationName": "Afiartis",
+    "meetingPoint": "Scarpanto Family Winery, Karpathos",
+    "fromPrice": 12,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm tasting menu, included wines, snacks, maximum group size, and private tasting options.",
+    "duration": "~45 minutes",
+    "difficulty": "Easy",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/08/karpathos-travel-scarpanto-wine-tasting-experience-6.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/08/karpathos-travel-scarpanto-wine-tasting-experience-16.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/08/karpathos-travel-scarpanto-wine-tasting-experience-24.jpg"
+    ],
+    "tags": [
+      "Food & Wine Tastings",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable clothes",
+      "camera",
+      "and optional cash/card for bottles or products."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": true,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": true,
+    "partnerName": "Scarpanto Family Winery",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 99,
+    "badge": null,
+    "operator": "Scarpanto Family Winery",
+    "mapQuery": "Scarpanto Family Winery, Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Scarpanto+Family+Winery%2C+Karpathos",
+    "bestFor": [
+      "Couples",
+      "Food lovers",
+      "Pre-dinner plans",
+      "Villa groups"
+    ],
+    "vipHeadline": "A refined introduction to Karpathian wine and island terroir.",
+    "highlights": [
+      "Local winery setting",
+      "Short and easy experience",
+      "Good for couples and small groups",
+      "Pairs well with dinner plans"
+    ],
+    "bookingNotes": "Confirm tasting menu, included wines, snacks, maximum group size, and private tasting options.",
+    "faqs": [
+      {
+        "q": "Is Scarpanto Wine Tasting Experience suitable for families?",
+        "a": "It is best for Couples, Food lovers, Pre-dinner plans, Villa groups. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Scarpanto Wine Tasting Experience take place?",
+        "a": "The listed area is Afiartis; the listed location or meeting area is Scarpanto Family Winery, Karpathos. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Scarpanto Wine Tasting Experience?",
+        "a": "Comfortable clothes, camera, and optional cash/card for bottles or products."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Scarpanto Wine Tasting Experience. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Scarpanto Wine Tasting Experience in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Scarpanto Wine Tasting Experience in Karpathos. View price from \u20ac12, duration ~45 minutes, area Afiartis, what to expect, and request availability.",
+    "h1": "Scarpanto Wine Tasting Experience in Karpathos"
+  },
+  {
+    "id": "exp_003",
+    "slug": "speedboat-snorkeling-adventure-karpathos",
+    "title": "Speedboat Snorkeling Adventure",
+    "category": "Watersports & Diving",
+    "shortDescription": "A short speedboat snorkeling experience for guests who want sea adventure without a full-day cruise.",
+    "fullDescription": "Perfect for guests who want a compact but memorable sea experience. Speedboat movement, clear water, and guided snorkeling make this easy to sell to couples, families, and groups.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Karpathos Diving Center, Pigadia",
+    "fromPrice": 48,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm swimming ability, equipment, weather policy, minimum age, meeting point, and cancellation terms.",
+    "duration": "~1.5 hours",
+    "difficulty": "Easy to moderate",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://www.greeka.com/shops/photos/sports/6691/karpathos-karpathos-diving-center-top-1-1920.jpg",
+      "https://media-cdn.tripadvisor.com/media/photo-s/12/f2/ff/f4/photo0jpg.jpg",
+      "https://www.divingkarpathos.gr/templates/yootheme/cache/gallery-03-0f7b6da2.jpeg"
+    ],
+    "tags": [
+      "Watersports & Diving",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Swimwear",
+      "towel",
+      "sunscreen",
+      "water",
+      "sunglasses",
+      "and a dry bag."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": true,
+    "bestForGroups": true,
+    "partnerName": "Karpathos Diving Center",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 98,
+    "badge": null,
+    "operator": "Karpathos Diving Center",
+    "mapQuery": "Karpathos Diving Center, Pigadia",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Karpathos+Diving+Center%2C+Pigadia",
+    "bestFor": [
+      "Couples",
+      "Families",
+      "Friends",
+      "Short sea activity"
+    ],
+    "vipHeadline": "A quick, cinematic escape into the blue waters of Karpathos.",
+    "highlights": [
+      "Short sea adventure",
+      "Snorkeling experience",
+      "Good for mixed groups",
+      "Easy half-day add-on"
+    ],
+    "bookingNotes": "Confirm swimming ability, equipment, weather policy, minimum age, meeting point, and cancellation terms.",
+    "faqs": [
+      {
+        "q": "Is Speedboat Snorkeling Adventure suitable for families?",
+        "a": "It is best for Couples, Families, Friends, Short sea activity. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Speedboat Snorkeling Adventure take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Karpathos Diving Center, Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Speedboat Snorkeling Adventure?",
+        "a": "Swimwear, towel, sunscreen, water, sunglasses, and a dry bag."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Speedboat Snorkeling Adventure. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Speedboat Snorkeling Adventure in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Speedboat Snorkeling Adventure in Karpathos. View price from \u20ac48, duration ~1.5 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "Speedboat Snorkeling Adventure in Karpathos"
+  },
+  {
+    "id": "exp_004",
+    "slug": "beginner-windsurfing-at-chicken-bay-karpathos",
+    "title": "Beginner Windsurfing at Chicken Bay",
+    "category": "Adventure & Watersports",
+    "shortDescription": "A beginner-friendly windsurfing introduction for guests who want to try an iconic Karpathos activity.",
+    "fullDescription": "Karpathos is internationally known for wind sports. This lesson is a polished and active introduction for first-timers, sporty couples, teenagers, and villa groups.",
+    "locationName": "Afiartis",
+    "meetingPoint": "Chicken Bay, near Karpathos Airport",
+    "fromPrice": 80,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm lesson duration, instructor ratio, equipment, insurance, language, wind conditions, and minimum age.",
+    "duration": "~2 hours",
+    "difficulty": "Beginner",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://www.ion-club.net/wp-content/uploads/2020/02/chicken-bay-windsurf-ion-club-karpathos-greece.jpg",
+      "https://www.ion-club.net/wp-content/uploads/2020/02/gun-bay-ion-club-karpathos-windsurf.jpg",
+      "https://static.sunandfun.com/chameleon/mediapool/0/54/karpathos-ion-club-surfen-in-der-chicken-bay_id2109254.jpg"
+    ],
+    "tags": [
+      "Adventure & Watersports",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Swimwear",
+      "towel",
+      "sunscreen",
+      "water",
+      "sunglasses strap",
+      "and secure swim shoes if recommended."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": true,
+    "partnerName": "ION Club Chicken Bay",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 97,
+    "badge": null,
+    "operator": "ION Club Chicken Bay",
+    "mapQuery": "Chicken Bay, near Karpathos Airport",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Chicken+Bay%2C+near+Karpathos+Airport",
+    "bestFor": [
+      "Active couples",
+      "Teenagers",
+      "Friends",
+      "First-time windsurfers"
+    ],
+    "vipHeadline": "Learn the signature sport of Karpathos in one of the island\u2019s best wind locations.",
+    "highlights": [
+      "Beginner-friendly windsurfing",
+      "Iconic Karpathos activity",
+      "Strong social-media appeal",
+      "Good for active travelers"
+    ],
+    "bookingNotes": "Confirm lesson duration, instructor ratio, equipment, insurance, language, wind conditions, and minimum age.",
+    "faqs": [
+      {
+        "q": "Is Beginner Windsurfing at Chicken Bay suitable for families?",
+        "a": "It is best for Active couples, Teenagers, Friends, First-time windsurfers. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Beginner Windsurfing at Chicken Bay take place?",
+        "a": "The listed area is Afiartis; the listed location or meeting area is Chicken Bay, near Karpathos Airport. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Beginner Windsurfing at Chicken Bay?",
+        "a": "Swimwear, towel, sunscreen, water, sunglasses strap, and secure swim shoes if recommended."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Beginner Windsurfing at Chicken Bay. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Beginner Windsurfing at Chicken Bay in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Beginner Windsurfing at Chicken Bay in Karpathos. View price from \u20ac80, duration ~2 hours, area Afiartis, what to expect, and request availability.",
+    "h1": "Beginner Windsurfing at Chicken Bay in Karpathos"
+  },
+  {
+    "id": "exp_005",
+    "slug": "beginner-wing-foiling-introduction-karpathos",
+    "title": "Beginner Wing Foiling Introduction",
+    "category": "Adventure & Watersports",
+    "shortDescription": "An introduction to wing foiling for sporty travelers looking for a newer, dynamic sea activity.",
+    "fullDescription": "Wing foiling feels modern, athletic, and highly visual. It suits motivated guests who want a more unusual wind-sport experience beyond the standard beach day.",
+    "locationName": "Afiartis",
+    "meetingPoint": "Afiartis / wind sports area",
+    "fromPrice": 0,
+    "currency": "\u20ac",
+    "priceType": "quote",
+    "priceNote": "Confirm operator, exact price, lesson format, equipment, safety requirements, and meeting point.",
+    "duration": "~2 hours",
+    "difficulty": "Beginner",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/04/wing-foiling-2025-2.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/04/wing-foiling-2025-4.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/04/wing-foiling-2025-5.jpg"
+    ],
+    "tags": [
+      "Adventure & Watersports",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Swimwear",
+      "towel",
+      "sunscreen",
+      "water",
+      "and secure sunglasses if needed."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Confirm operator",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 96,
+    "badge": "Pending",
+    "operator": "Confirm operator",
+    "mapQuery": "Afiartis / wind sports area Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Afiartis+%2F+wind+sports+area+Karpathos",
+    "bestFor": [
+      "Active guests",
+      "Wind sport fans",
+      "Teenagers",
+      "Sporty couples"
+    ],
+    "vipHeadline": "A modern wind-sport experience for guests who want something fresh and energetic.",
+    "highlights": [
+      "Modern wind sport",
+      "Good for sporty travelers",
+      "Strong video potential",
+      "Weather-dependent active experience"
+    ],
+    "bookingNotes": "Confirm operator, exact price, lesson format, equipment, safety requirements, and meeting point.",
+    "faqs": [
+      {
+        "q": "Is Beginner Wing Foiling Introduction suitable for families?",
+        "a": "It is best for Active guests, Wind sport fans, Teenagers, Sporty couples. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Beginner Wing Foiling Introduction take place?",
+        "a": "The listed area is Afiartis; the listed location or meeting area is Afiartis / wind sports area. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Beginner Wing Foiling Introduction?",
+        "a": "Swimwear, towel, sunscreen, water, and secure sunglasses if needed."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Beginner Wing Foiling Introduction. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Beginner Wing Foiling Introduction in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Beginner Wing Foiling Introduction in Karpathos. View price from Confirm, duration ~2 hours, area Afiartis, what to expect, and request availability.",
+    "h1": "Beginner Wing Foiling Introduction in Karpathos"
+  },
+  {
+    "id": "exp_006",
+    "slug": "introductory-scuba-diving-for-beginners-karpathos",
+    "title": "Introductory Scuba Diving for Beginners",
+    "category": "Watersports & Diving",
+    "shortDescription": "A beginner scuba experience for guests who want to discover the underwater side of the island with professional support.",
+    "fullDescription": "A strong bucket-list activity for guests who have never tried diving. Best positioned as safe, guided, and memorable for couples and active families.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Karpathos Diving Center, Pigadia",
+    "fromPrice": 0,
+    "currency": "\u20ac",
+    "priceType": "quote",
+    "priceNote": "Confirm medical requirements, minimum age, equipment, price, duration, and second-dive option.",
+    "duration": "~2 hours / optional second dive",
+    "difficulty": "Beginner",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://www.divingkarpathos.gr/templates/yootheme/cache/people_in_the_water-4202f3a7.jpeg",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/scuba-diving-for-beginners-2025-1.webp",
+      "https://www.greeka.com/shops/photos/sports/6691/karpathos-karpathos-diving-center-top-1-1920.jpg"
+    ],
+    "tags": [
+      "Watersports & Diving",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Swimwear",
+      "towel",
+      "sunscreen",
+      "water",
+      "and any required medical/certification forms."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated",
+      "No flying for 18h after diving"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Karpathos Diving Center",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 95,
+    "badge": "Pending",
+    "operator": "Karpathos Diving Center",
+    "mapQuery": "Karpathos Diving Center, Pigadia",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Karpathos+Diving+Center%2C+Pigadia",
+    "bestFor": [
+      "First-time divers",
+      "Couples",
+      "Families with older children",
+      "Bucket-list guests"
+    ],
+    "vipHeadline": "A first underwater experience in the clear blue world of Karpathos.",
+    "highlights": [
+      "Beginner-friendly scuba option",
+      "Bucket-list appeal",
+      "Memorable underwater experience",
+      "Professional dive setting"
+    ],
+    "bookingNotes": "Confirm medical requirements, minimum age, equipment, price, duration, and second-dive option.",
+    "faqs": [
+      {
+        "q": "Is Introductory Scuba Diving for Beginners suitable for families?",
+        "a": "It is best for First-time divers, Couples, Families with older children, Bucket-list guests. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Introductory Scuba Diving for Beginners take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Karpathos Diving Center, Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Introductory Scuba Diving for Beginners?",
+        "a": "Swimwear, towel, sunscreen, water, and any required medical/certification forms."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Introductory Scuba Diving for Beginners. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Introductory Scuba Diving for Beginners in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Introductory Scuba Diving for Beginners in Karpathos. View price from Confirm, duration ~2 hours / optional second dive, area Pigadia, what to expect, and request availability.",
+    "h1": "Introductory Scuba Diving for Beginners in Karpathos"
+  },
+  {
+    "id": "exp_007",
+    "slug": "advanced-scuba-diving-session-karpathos",
+    "title": "Advanced Scuba Diving Session",
+    "category": "Watersports & Diving",
+    "shortDescription": "A scuba session for certified divers who want to explore local underwater sites.",
+    "fullDescription": "A specialized product for guests who already dive and want a serious sea experience during their Karpathos stay.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Karpathos Diving Center, Pigadia",
+    "fromPrice": 60,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm certification level, dive site, equipment, insurance, duration, and inclusions.",
+    "duration": "Confirm session duration",
+    "difficulty": "Advanced / certified",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=483399503789196",
+      "https://www.divingkarpathos.gr/templates/yootheme/cache/people_in_the_water-4202f3a7.jpeg",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=100063574512671"
+    ],
+    "tags": [
+      "Watersports & Diving",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Certification card",
+      "logbook if needed",
+      "swimwear",
+      "towel",
+      "water",
+      "and sunscreen."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated",
+      "No flying for 18h after diving"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Karpathos Diving Center",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 94,
+    "badge": "Verified",
+    "operator": "Karpathos Diving Center",
+    "mapQuery": "Karpathos Diving Center, Pigadia",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Karpathos+Diving+Center%2C+Pigadia",
+    "bestFor": [
+      "Certified divers",
+      "Active couples",
+      "Repeat visitors"
+    ],
+    "vipHeadline": "A refined dive experience for certified guests seeking Karpathos beneath the surface.",
+    "highlights": [
+      "For certified divers",
+      "Adventure positioning",
+      "Good repeat-visitor product",
+      "Can fit multi-day active itineraries"
+    ],
+    "bookingNotes": "Confirm certification level, dive site, equipment, insurance, duration, and inclusions.",
+    "faqs": [
+      {
+        "q": "Is Advanced Scuba Diving Session suitable for families?",
+        "a": "It is best for Certified divers, Active couples, Repeat visitors. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Advanced Scuba Diving Session take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Karpathos Diving Center, Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Advanced Scuba Diving Session?",
+        "a": "Certification card, logbook if needed, swimwear, towel, water, and sunscreen."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Advanced Scuba Diving Session. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Advanced Scuba Diving Session in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Advanced Scuba Diving Session in Karpathos. View price from \u20ac60, duration Confirm session duration, area Pigadia, what to expect, and request availability.",
+    "h1": "Advanced Scuba Diving Session in Karpathos"
+  },
+  {
+    "id": "exp_008",
+    "slug": "advanced-scuba-diving-package-karpathos",
+    "title": "Advanced Scuba Diving Package",
+    "category": "Watersports & Diving",
+    "shortDescription": "A scuba package for certified divers who want a fuller diving experience rather than a single session.",
+    "fullDescription": "A higher-ticket product for travelers who plan around activity and adventure. It should be sold with clear certification and schedule requirements.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Karpathos Diving Center, Pigadia",
+    "fromPrice": 300,
+    "currency": "\u20ac",
+    "priceType": "per_group",
+    "priceNote": "Confirm number of dives, dates, equipment, certification requirements, cancellation policy, and flexibility.",
+    "duration": "Package / confirm schedule",
+    "difficulty": "Advanced / certified",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://www.divingkarpathos.gr/templates/yootheme/cache/people_in_the_water-4202f3a7.jpeg",
+      "https://www.greeka.com/shops/photos/sports/6691/karpathos-karpathos-diving-center-top-1-1920.jpg",
+      "https://www.divingkarpathos.gr/templates/yootheme/cache/gallery-03-0f7b6da2.jpeg"
+    ],
+    "tags": [
+      "Watersports & Diving",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Certification card",
+      "logbook if needed",
+      "swimwear",
+      "towel",
+      "sunscreen",
+      "and water."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated",
+      "No flying for 18h after diving"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": false,
+    "bestForGroups": false,
+    "partnerName": "Karpathos Diving Center",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 93,
+    "badge": "Verified",
+    "operator": "Karpathos Diving Center",
+    "mapQuery": "Karpathos Diving Center, Pigadia",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Karpathos+Diving+Center%2C+Pigadia",
+    "bestFor": [
+      "Certified divers",
+      "Adventure travelers",
+      "Premium active guests"
+    ],
+    "vipHeadline": "A multi-dive Karpathos escape for serious underwater explorers.",
+    "highlights": [
+      "Higher-ticket product",
+      "Multi-dive potential",
+      "Strong fit for certified divers",
+      "Premium adventure positioning"
+    ],
+    "bookingNotes": "Confirm number of dives, dates, equipment, certification requirements, cancellation policy, and flexibility.",
+    "faqs": [
+      {
+        "q": "Is Advanced Scuba Diving Package suitable for families?",
+        "a": "It is best for Certified divers, Adventure travelers, Premium active guests. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Advanced Scuba Diving Package take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Karpathos Diving Center, Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Advanced Scuba Diving Package?",
+        "a": "Certification card, logbook if needed, swimwear, towel, sunscreen, and water."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Advanced Scuba Diving Package. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Advanced Scuba Diving Package in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Advanced Scuba Diving Package in Karpathos. View price from \u20ac300, duration Package / confirm schedule, area Pigadia, what to expect, and request availability.",
+    "h1": "Advanced Scuba Diving Package in Karpathos"
+  },
+  {
+    "id": "exp_009",
+    "slug": "ancient-greek-pebble-stones-workshop-karpathos",
+    "title": "Ancient Greek Pebble Stones Workshop",
+    "category": "Workshops & Local Craft",
+    "shortDescription": "A creative pebble-stone workshop where guests make a personal piece inspired by Greek decorative art.",
+    "fullDescription": "A calm hands-on experience away from the beach. It suits families, couples, and villa guests who enjoy craft, local materials, and a slower travel rhythm.",
+    "locationName": "Volada / Pini",
+    "meetingPoint": "Pini, Volada",
+    "fromPrice": 48,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm drying/collection time, transport options, language, and delivery to accommodation.",
+    "duration": "~2 hours",
+    "difficulty": "Beginner-friendly",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://i0.wp.com/artandwalk.com/wp-content/uploads/2023/02/mosaic-art-and-walk2.jpg?resize=1280%2C934&ssl=1",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1308707604588701",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1310291157763679"
+    ],
+    "tags": [
+      "Workshops & Local Craft",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable clothes and ideas for a simple design."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Art and Walk",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 92,
+    "badge": null,
+    "operator": "Art and Walk",
+    "mapQuery": "Pini, Volada Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pini%2C+Volada+Karpathos",
+    "bestFor": [
+      "Families",
+      "Creative guests",
+      "Couples",
+      "Windy or cloudy days"
+    ],
+    "vipHeadline": "A slow, handmade workshop inspired by ancient Greek craft.",
+    "highlights": [
+      "Creative local workshop",
+      "Good souvenir value",
+      "Beginner-friendly",
+      "Excellent non-beach activity"
+    ],
+    "bookingNotes": "Confirm drying/collection time, transport options, language, and delivery to accommodation.",
+    "faqs": [
+      {
+        "q": "Is Ancient Greek Pebble Stones Workshop suitable for families?",
+        "a": "It is best for Families, Creative guests, Couples, Windy or cloudy days. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Ancient Greek Pebble Stones Workshop take place?",
+        "a": "The listed area is Volada / Pini; the listed location or meeting area is Pini, Volada. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Ancient Greek Pebble Stones Workshop?",
+        "a": "Comfortable clothes and ideas for a simple design."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Ancient Greek Pebble Stones Workshop. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Ancient Greek Pebble Stones Workshop in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Ancient Greek Pebble Stones Workshop in Karpathos. View price from \u20ac48, duration ~2 hours, area Volada / Pini, what to expect, and request availability.",
+    "h1": "Ancient Greek Pebble Stones Workshop in Karpathos"
+  },
+  {
+    "id": "exp_010",
+    "slug": "botanical-clay-atelier-karpathos",
+    "title": "Botanical Clay Atelier",
+    "category": "Workshops & Local Craft",
+    "shortDescription": "A botanical clay workshop where guests create a handmade piece inspired by local plants and textures.",
+    "fullDescription": "A soft, aesthetic, slow-luxury activity for guests who want something elegant, creative, and non-physical.",
+    "locationName": "Volada / Pini",
+    "meetingPoint": "Pini, Volada",
+    "fromPrice": 48,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm duration, pickup options, drying time, and delivery/collection arrangements.",
+    "duration": "~2 hours / confirm",
+    "difficulty": "Beginner-friendly",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1363730285753099",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1310291157763679",
+      "https://www.world-tourism.org/wp-content/uploads/2025/07/karpathos-botanical-clay-workshop-pottery-in-a-vineyard.jpg"
+    ],
+    "tags": [
+      "Workshops & Local Craft",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable clothes; avoid delicate fabrics if using clay."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": true,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Art and Walk",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 91,
+    "badge": null,
+    "operator": "Art and Walk",
+    "mapQuery": "Pini, Volada Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pini%2C+Volada+Karpathos",
+    "bestFor": [
+      "Families",
+      "Couples",
+      "Creative travelers",
+      "Villa guests"
+    ],
+    "vipHeadline": "A delicate clay workshop shaped by the herbs and textures of Karpathos.",
+    "highlights": [
+      "Aesthetic and photogenic",
+      "Strong family/couple appeal",
+      "Calm creative atmosphere",
+      "Good for windy or hot days"
+    ],
+    "bookingNotes": "Confirm duration, pickup options, drying time, and delivery/collection arrangements.",
+    "faqs": [
+      {
+        "q": "Is Botanical Clay Atelier suitable for families?",
+        "a": "It is best for Families, Couples, Creative travelers, Villa guests. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Botanical Clay Atelier take place?",
+        "a": "The listed area is Volada / Pini; the listed location or meeting area is Pini, Volada. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Botanical Clay Atelier?",
+        "a": "Comfortable clothes; avoid delicate fabrics if using clay."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Botanical Clay Atelier. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Botanical Clay Atelier in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Botanical Clay Atelier in Karpathos. View price from \u20ac48, duration ~2 hours / confirm, area Volada / Pini, what to expect, and request availability.",
+    "h1": "Botanical Clay Atelier in Karpathos"
+  },
+  {
+    "id": "exp_011",
+    "slug": "creative-mosaic-workshop-karpathos",
+    "title": "Creative Mosaic Workshop",
+    "category": "Workshops & Local Craft",
+    "shortDescription": "A hands-on mosaic workshop where guests design and create a personal artwork under local guidance.",
+    "fullDescription": "One of the strongest creative products: personal, relaxed, premium-feeling and family-friendly without being expensive.",
+    "locationName": "Volada / Pini",
+    "meetingPoint": "Art and Walk Vineyard, Pini",
+    "fromPrice": 48,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Art and Walk lists Tuesday/Friday sessions, Pini vineyard location, materials, grouting, and delivery/pickup options; confirm current schedule and capacity.",
+    "duration": "3\u20134 hours",
+    "difficulty": "Beginner-friendly",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://i0.wp.com/artandwalk.com/wp-content/uploads/2023/02/watermarked-Mosaic-Art-workshop-Art-and-Walk-watermarked-68.jpg?resize=1280%2C934&ssl=1",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1308707607922034",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1310291157763679"
+    ],
+    "tags": [
+      "Workshops & Local Craft",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Design ideas",
+      "comfortable clothes",
+      "and enough time for collection/delivery if needed."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": true,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": false,
+    "bestForGroups": true,
+    "partnerName": "Art and Walk",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 90,
+    "badge": "Verified",
+    "operator": "Art and Walk",
+    "mapQuery": "Art and Walk Vineyard, Pini Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Art+and+Walk+Vineyard%2C+Pini+Karpathos",
+    "bestFor": [
+      "Families",
+      "Creative travelers",
+      "Windy-day activity",
+      "Villa groups"
+    ],
+    "vipHeadline": "A beautiful island morning spent creating your own Karpathos mosaic.",
+    "highlights": [
+      "Strong souvenir value",
+      "Ideal for families and villa groups",
+      "Good non-beach activity",
+      "More immersive than shorter workshops"
+    ],
+    "bookingNotes": "Art and Walk lists Tuesday/Friday sessions, Pini vineyard location, materials, grouting, and delivery/pickup options; confirm current schedule and capacity.",
+    "faqs": [
+      {
+        "q": "Is Creative Mosaic Workshop suitable for families?",
+        "a": "It is best for Families, Creative travelers, Windy-day activity, Villa groups. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Creative Mosaic Workshop take place?",
+        "a": "The listed area is Volada / Pini; the listed location or meeting area is Art and Walk Vineyard, Pini. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Creative Mosaic Workshop?",
+        "a": "Design ideas, comfortable clothes, and enough time for collection/delivery if needed."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Creative Mosaic Workshop. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Creative Mosaic Workshop in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Creative Mosaic Workshop in Karpathos. View price from \u20ac48, duration 3\u20134 hours, area Volada / Pini, what to expect, and request availability.",
+    "h1": "Creative Mosaic Workshop in Karpathos"
+  },
+  {
+    "id": "exp_012",
+    "slug": "relaxing-massage-in-pigadia-karpathos",
+    "title": "Relaxing Massage in Pigadia",
+    "category": "Wellness & Massage",
+    "shortDescription": "A relaxing massage for guests who want to unwind after travel, hiking, beach days, or watersports.",
+    "fullDescription": "A practical wellness add-on for comfort and recovery, especially for couples, older guests, and longer-stay visitors.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Pigadia",
+    "fromPrice": 50,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm location, therapist availability, couple sessions, mobile villa service option, and cancellation terms.",
+    "duration": "50 minutes",
+    "difficulty": "Easy",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/22/1e/b3/02/spa-massage-therapetick.jpg?w=1200&h=1200&s=1",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/relaxing-massage-fp-2025-6.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/theraputic-massage-2025-fp-6.jpg"
+    ],
+    "tags": [
+      "Wellness & Massage",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Arrive relaxed; confirm whether towels/shower facilities are provided."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Angel Hands Wellness & Spa",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 89,
+    "badge": null,
+    "operator": "Angel Hands Wellness & Spa",
+    "mapQuery": "Pigadia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Karpathos",
+    "bestFor": [
+      "Couples",
+      "Villa guests",
+      "Post-travel recovery",
+      "Wellness"
+    ],
+    "vipHeadline": "A simple, restorative pause in the heart of Pigadia.",
+    "highlights": [
+      "Easy wellness upsell",
+      "Good after hiking or watersports",
+      "Works for couples",
+      "Low-friction booking"
+    ],
+    "bookingNotes": "Confirm location, therapist availability, couple sessions, mobile villa service option, and cancellation terms.",
+    "faqs": [
+      {
+        "q": "Is Relaxing Massage in Pigadia suitable for families?",
+        "a": "It is best for Couples, Villa guests, Post-travel recovery, Wellness. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Relaxing Massage in Pigadia take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Relaxing Massage in Pigadia?",
+        "a": "Arrive relaxed; confirm whether towels/shower facilities are provided."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Relaxing Massage in Pigadia. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Relaxing Massage in Pigadia in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Relaxing Massage in Pigadia in Karpathos. View price from \u20ac50, duration 50 minutes, area Pigadia, what to expect, and request availability.",
+    "h1": "Relaxing Massage in Pigadia in Karpathos"
+  },
+  {
+    "id": "exp_013",
+    "slug": "therapeutic-massage-karpathos",
+    "title": "Therapeutic Massage",
+    "category": "Wellness & Massage",
+    "shortDescription": "A focused massage option for guests who need recovery after travel, hiking, watersports, or long exploration days.",
+    "fullDescription": "Best positioned as recovery-focused rather than purely relaxing, especially relevant after windsurfing, hiking, biking, or diving.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Pigadia",
+    "fromPrice": 55,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm duration, treatment style, mobile service availability, therapist capacity, and injury suitability.",
+    "duration": "Confirm duration",
+    "difficulty": "Easy",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://www.angelshandsmassage.com/wp-content/uploads/2023/04/location-image-18.jpg",
+      "https://s3-media0.fl.yelpcdn.com/bphoto/RWDuepO9x07fY9A7tLKKVg/o.jpg",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=100081678916084"
+    ],
+    "tags": [
+      "Wellness & Massage",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Mention any injury or sensitivity before treatment."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": false,
+    "bestForGroups": false,
+    "partnerName": "Angel Hands Wellness & Spa",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 88,
+    "badge": null,
+    "operator": "Angel Hands Wellness & Spa",
+    "mapQuery": "Pigadia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Karpathos",
+    "bestFor": [
+      "Active guests",
+      "Hikers",
+      "Windsurfers",
+      "Wellness travelers"
+    ],
+    "vipHeadline": "Targeted recovery for active Karpathos days.",
+    "highlights": [
+      "Recovery-focused",
+      "Good for active travelers",
+      "Strong sports add-on",
+      "Higher perceived value than basic massage"
+    ],
+    "bookingNotes": "Confirm duration, treatment style, mobile service availability, therapist capacity, and injury suitability.",
+    "faqs": [
+      {
+        "q": "Is Therapeutic Massage suitable for families?",
+        "a": "It is best for Active guests, Hikers, Windsurfers, Wellness travelers. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Therapeutic Massage take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Therapeutic Massage?",
+        "a": "Mention any injury or sensitivity before treatment."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Therapeutic Massage. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Therapeutic Massage in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Therapeutic Massage in Karpathos. View price from \u20ac55, duration Confirm duration, area Pigadia, what to expect, and request availability.",
+    "h1": "Therapeutic Massage in Karpathos"
+  },
+  {
+    "id": "exp_014",
+    "slug": "private-feeling-yoga-session-karpathos",
+    "title": "Private-Feeling Yoga Session",
+    "category": "Wellness & Massage",
+    "shortDescription": "A calming yoga session for guests who want balance, wellness, and softness in their Karpathos holiday.",
+    "fullDescription": "A natural fit for villa guests, couples, and slow-travel visitors. Can be sold as morning or sunset wellness, especially paired with massage or sound healing.",
+    "locationName": "Adia",
+    "meetingPoint": "Adia",
+    "fromPrice": 25,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm yoga style, private-session option, mats, location, group capacity, and villa visits.",
+    "duration": "~60 minutes",
+    "difficulty": "Adaptable",
+    "groupType": "private",
+    "maxGuests": 8,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://photos.tpn.to/rq/hm/ir/gl/1600x900.jpg",
+      "https://retreatvenues.com/wp-content/uploads/2024/12/kathysisland12.jpg",
+      "https://retreatvenues.com/wp-content/uploads/2024/12/kathysisland16.jpg"
+    ],
+    "tags": [
+      "Wellness & Massage",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable clothes",
+      "water",
+      "and a towel if mats are not provided."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Kathy\u2019s Island Retreat",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 87,
+    "badge": null,
+    "operator": "Kathy\u2019s Island Retreat",
+    "mapQuery": "Adia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Adia+Karpathos",
+    "bestFor": [
+      "Wellness travelers",
+      "Couples",
+      "Villa guests",
+      "Retreat groups"
+    ],
+    "vipHeadline": "A quiet island reset for body, breath, and mind.",
+    "highlights": [
+      "Accessible wellness activity",
+      "Strong villa/retreat fit",
+      "Good for couples and groups",
+      "Pairs with other treatments"
+    ],
+    "bookingNotes": "Confirm yoga style, private-session option, mats, location, group capacity, and villa visits.",
+    "faqs": [
+      {
+        "q": "Is Private-Feeling Yoga Session suitable for families?",
+        "a": "It is best for Wellness travelers, Couples, Villa guests, Retreat groups. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Private-Feeling Yoga Session take place?",
+        "a": "The listed area is Adia; the listed location or meeting area is Adia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Private-Feeling Yoga Session?",
+        "a": "Comfortable clothes, water, and a towel if mats are not provided."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Private-Feeling Yoga Session. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Private-Feeling Yoga Session in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Private-Feeling Yoga Session in Karpathos. View price from \u20ac25, duration ~60 minutes, area Adia, what to expect, and request availability.",
+    "h1": "Private-Feeling Yoga Session in Karpathos"
+  },
+  {
+    "id": "exp_015",
+    "slug": "reflexology-wellness-session-karpathos",
+    "title": "Reflexology Wellness Session",
+    "category": "Wellness & Massage",
+    "shortDescription": "A reflexology session for guests who want a calm, restorative treatment during their stay.",
+    "fullDescription": "A refined wellness add-on for guests who prefer quiet personal treatments over group activities.",
+    "locationName": "Adia",
+    "meetingPoint": "Adia",
+    "fromPrice": 60,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm treatment format, location, availability, and mobile treatment possibility.",
+    "duration": "45 minutes",
+    "difficulty": "Easy",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://retreatvenues.com/wp-content/uploads/2024/12/kathysisland16.jpg",
+      "https://www.feelgreece.com/cx/m/0/2/965/512294-viewom.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/karpathos-travel-sound-healing-therapy-sessions-2023-10_800.jpg"
+    ],
+    "tags": [
+      "Wellness & Massage",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Arrive rested; mention sensitivities or medical considerations in advance."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": false,
+    "bestForGroups": false,
+    "partnerName": "Kathy\u2019s Island Retreat",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 86,
+    "badge": null,
+    "operator": "Kathy\u2019s Island Retreat",
+    "mapQuery": "Adia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Adia+Karpathos",
+    "bestFor": [
+      "Wellness guests",
+      "Post-travel recovery",
+      "Quiet afternoons"
+    ],
+    "vipHeadline": "A focused wellness treatment for deep relaxation and reset.",
+    "highlights": [
+      "Quiet and restorative",
+      "Good for wellness guests",
+      "Easy add-on",
+      "Suitable for non-active days"
+    ],
+    "bookingNotes": "Confirm treatment format, location, availability, and mobile treatment possibility.",
+    "faqs": [
+      {
+        "q": "Is Reflexology Wellness Session suitable for families?",
+        "a": "It is best for Wellness guests, Post-travel recovery, Quiet afternoons. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Reflexology Wellness Session take place?",
+        "a": "The listed area is Adia; the listed location or meeting area is Adia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Reflexology Wellness Session?",
+        "a": "Arrive rested; mention sensitivities or medical considerations in advance."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Reflexology Wellness Session. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Reflexology Wellness Session in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Reflexology Wellness Session in Karpathos. View price from \u20ac60, duration 45 minutes, area Adia, what to expect, and request availability.",
+    "h1": "Reflexology Wellness Session in Karpathos"
+  },
+  {
+    "id": "exp_016",
+    "slug": "stone-massage-ritual-karpathos",
+    "title": "Stone Massage Ritual",
+    "category": "Wellness & Massage",
+    "shortDescription": "A stone massage wellness ritual designed for guests seeking deeper relaxation and comfort.",
+    "fullDescription": "A premium-feeling wellness product for couples, villa guests, and travelers looking for indulgent recovery.",
+    "locationName": "Adia",
+    "meetingPoint": "Adia",
+    "fromPrice": 75,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm treatment details, availability, couples sessions, location, and private group options.",
+    "duration": "55 minutes",
+    "difficulty": "Easy",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://retreatvenues.com/wp-content/uploads/2024/12/kathysisland16.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/karpathos-travel-sound-healing-therapy-sessions-2023-10_800.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/tibetan-massage-karpathos-travel-2023-1000-500.jpeg"
+    ],
+    "tags": [
+      "Wellness & Massage",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Mention any heat sensitivity or treatment preferences in advance."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Kathy\u2019s Island Retreat",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 85,
+    "badge": null,
+    "operator": "Kathy\u2019s Island Retreat",
+    "mapQuery": "Adia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Adia+Karpathos",
+    "bestFor": [
+      "Couples",
+      "Wellness travelers",
+      "Premium villa guests"
+    ],
+    "vipHeadline": "A warm, grounding treatment for a slower Karpathos afternoon.",
+    "highlights": [
+      "Premium wellness feel",
+      "Good for couples",
+      "Strong villa-guest upsell",
+      "Relaxation positioning"
+    ],
+    "bookingNotes": "Confirm treatment details, availability, couples sessions, location, and private group options.",
+    "faqs": [
+      {
+        "q": "Is Stone Massage Ritual suitable for families?",
+        "a": "It is best for Couples, Wellness travelers, Premium villa guests. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Stone Massage Ritual take place?",
+        "a": "The listed area is Adia; the listed location or meeting area is Adia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Stone Massage Ritual?",
+        "a": "Mention any heat sensitivity or treatment preferences in advance."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Stone Massage Ritual. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Stone Massage Ritual in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Stone Massage Ritual in Karpathos. View price from \u20ac75, duration 55 minutes, area Adia, what to expect, and request availability.",
+    "h1": "Stone Massage Ritual in Karpathos"
+  },
+  {
+    "id": "exp_017",
+    "slug": "sound-healing-therapy-karpathos",
+    "title": "Sound Healing Therapy",
+    "category": "Wellness & Massage",
+    "shortDescription": "A sound healing session for travelers who want a peaceful, restorative wellness experience.",
+    "fullDescription": "A marketable slow-travel and retreat-style product, positioned as a gentle alternative to standard massage or yoga.",
+    "locationName": "Adia",
+    "meetingPoint": "Adia",
+    "fromPrice": 60,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm group capacity, private sessions, exact location, and villa session possibility.",
+    "duration": "45 minutes",
+    "difficulty": "Easy",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2023/02/karpathos-travel-sound-healing-therapy-sessions-2023-10_800.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/karpathos-travel-sound-healing-therapy-sessions-2023-11_800.jpg",
+      "https://www.greeceretreats.gr/wp-content/uploads/2020/05/elias9.jpeg"
+    ],
+    "tags": [
+      "Wellness & Massage",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable clothing and openness to a quiet meditative session."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Kathy\u2019s Island Retreat",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 84,
+    "badge": null,
+    "operator": "Kathy\u2019s Island Retreat",
+    "mapQuery": "Adia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Adia+Karpathos",
+    "bestFor": [
+      "Wellness travelers",
+      "Couples",
+      "Retreat groups",
+      "Quiet-day guests"
+    ],
+    "vipHeadline": "A meditative sound journey for guests seeking calm and inner reset.",
+    "highlights": [
+      "Distinctive wellness experience",
+      "Good for retreats and couples",
+      "Calm premium atmosphere",
+      "Strong add-on for villa groups"
+    ],
+    "bookingNotes": "Confirm group capacity, private sessions, exact location, and villa session possibility.",
+    "faqs": [
+      {
+        "q": "Is Sound Healing Therapy suitable for families?",
+        "a": "It is best for Wellness travelers, Couples, Retreat groups, Quiet-day guests. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Sound Healing Therapy take place?",
+        "a": "The listed area is Adia; the listed location or meeting area is Adia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Sound Healing Therapy?",
+        "a": "Comfortable clothing and openness to a quiet meditative session."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Sound Healing Therapy. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Sound Healing Therapy in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Sound Healing Therapy in Karpathos. View price from \u20ac60, duration 45 minutes, area Adia, what to expect, and request availability.",
+    "h1": "Sound Healing Therapy in Karpathos"
+  },
+  {
+    "id": "exp_018",
+    "slug": "full-day-gym-access-in-pigadia-karpathos",
+    "title": "Full-Day Gym Access in Pigadia",
+    "category": "Fitness & Lifestyle",
+    "shortDescription": "A simple day-pass gym option for guests who want to train during their holiday.",
+    "fullDescription": "A practical lifestyle add-on for long-stay guests, fitness-focused travelers, and villa groups who want access to equipment.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Pigadia",
+    "fromPrice": 10,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm opening hours, equipment, shower facilities, day-pass process, and weekly pass availability.",
+    "duration": "1 day",
+    "difficulty": "Self-paced",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://i.ytimg.com/vi/tv9PZBT1YNI/maxresdefault.jpg",
+      "https://i.ytimg.com/vi/-IjqsoPl-GA/maxresdefault.jpg",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=695121426598138"
+    ],
+    "tags": [
+      "Fitness & Lifestyle",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Training clothes",
+      "shoes",
+      "towel",
+      "and water."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": false,
+    "bestForGroups": true,
+    "partnerName": "Iron Forge Gym",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 83,
+    "badge": null,
+    "operator": "Iron Forge Gym",
+    "mapQuery": "Pigadia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Karpathos",
+    "bestFor": [
+      "Fitness guests",
+      "Long-stay visitors",
+      "Villa groups",
+      "Digital nomads"
+    ],
+    "vipHeadline": "Keep your training routine while staying in Karpathos.",
+    "highlights": [
+      "Low-cost practical add-on",
+      "Good for long stays",
+      "Useful in villa guide",
+      "Easy QR-code sell"
+    ],
+    "bookingNotes": "Confirm opening hours, equipment, shower facilities, day-pass process, and weekly pass availability.",
+    "faqs": [
+      {
+        "q": "Is Full-Day Gym Access in Pigadia suitable for families?",
+        "a": "It is best for Fitness guests, Long-stay visitors, Villa groups, Digital nomads. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Full-Day Gym Access in Pigadia take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Full-Day Gym Access in Pigadia?",
+        "a": "Training clothes, shoes, towel, and water."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Full-Day Gym Access in Pigadia. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Full-Day Gym Access in Pigadia in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Full-Day Gym Access in Pigadia in Karpathos. View price from \u20ac10, duration 1 day, area Pigadia, what to expect, and request availability.",
+    "h1": "Full-Day Gym Access in Pigadia in Karpathos"
+  },
+  {
+    "id": "exp_019",
+    "slug": "rock-climbing-in-arkasa-karpathos",
+    "title": "Rock Climbing in Arkasa",
+    "category": "Adventure & Watersports",
+    "shortDescription": "A guided rock climbing experience in the Arkasa area for adventure-focused travelers once provider details are confirmed.",
+    "fullDescription": "High potential as a premium adventure product, but only after confirming instructor, route levels, equipment, insurance, and safety standards.",
+    "locationName": "Arkasa",
+    "meetingPoint": "Arkasa",
+    "fromPrice": 0,
+    "currency": "\u20ac",
+    "priceType": "quote",
+    "priceNote": "Needs verification: provider, certification, insurance, equipment, route levels, minimum age, and pricing.",
+    "duration": "Confirm",
+    "difficulty": "Route-dependent",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://climbingkarpathos.com/wp-content/uploads/2023/06/arkasa11.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2024/06/st-nicholas-arkasa-rock-climbing-2025-12.webp",
+      "https://climbingkarpathos.com/wp-content/uploads/2023/06/arkasa02.jpg"
+    ],
+    "tags": [
+      "Adventure & Watersports",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Proper shoes/clothing",
+      "water",
+      "sun protection; technical equipment should be confirmed with provider."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated",
+      "Harness and helmet must be worn"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": false,
+    "bestForGroups": true,
+    "partnerName": "Confirm climbing instructor/provider",
+    "closestTo": [
+      "Arkasa"
+    ],
+    "popularity": 82,
+    "badge": "Pending",
+    "operator": "Confirm climbing instructor/provider",
+    "mapQuery": "Arkasa Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Arkasa+Karpathos",
+    "bestFor": [
+      "Active travelers",
+      "Adventure groups",
+      "Teenagers",
+      "Private guided adventure"
+    ],
+    "vipHeadline": "A dramatic land adventure for guests who want Karpathos beyond the beaches.",
+    "highlights": [
+      "High-adventure appeal",
+      "Good for private groups",
+      "Strong photography potential",
+      "Differentiates from basic tours"
+    ],
+    "bookingNotes": "Needs verification: provider, certification, insurance, equipment, route levels, minimum age, and pricing.",
+    "faqs": [
+      {
+        "q": "Is Rock Climbing in Arkasa suitable for families?",
+        "a": "It is best for Active travelers, Adventure groups, Teenagers, Private guided adventure. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Rock Climbing in Arkasa take place?",
+        "a": "The listed area is Arkasa; the listed location or meeting area is Arkasa. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Rock Climbing in Arkasa?",
+        "a": "Proper shoes/clothing, water, sun protection; technical equipment should be confirmed with provider."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Rock Climbing in Arkasa. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Rock Climbing in Arkasa in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Rock Climbing in Arkasa in Karpathos. View price from Confirm, duration Confirm, area Arkasa, what to expect, and request availability.",
+    "h1": "Rock Climbing in Arkasa in Karpathos"
+  },
+  {
+    "id": "exp_020",
+    "slug": "pigadia-trails-mountain-bike-experience-karpathos",
+    "title": "Pigadia Trails Mountain Bike Experience",
+    "category": "Adventure & Watersports",
+    "shortDescription": "A mountain-bike experience around Pigadia for riders seeking active and demanding island adventure.",
+    "fullDescription": "Not a casual ride. Position for experienced riders and sporty guests who want guided terrain and local route knowledge.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Meltemi Biking, Karpathos",
+    "fromPrice": 75,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm bike type, safety gear, route difficulty, insurance, minimum age, and e-bike alternatives.",
+    "duration": "~3 hours",
+    "difficulty": "Advanced / technical",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1126545855659576",
+      "https://karpathostravel.com/wp-content/uploads/2025/04/karpathos-travel-trails-1.jpg",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1119160406398121"
+    ],
+    "tags": [
+      "Adventure & Watersports",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Sports clothes",
+      "closed shoes",
+      "water",
+      "sunscreen",
+      "and cycling experience."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": false,
+    "bestForGroups": true,
+    "partnerName": "Meltemi Biking",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 81,
+    "badge": "Verified",
+    "operator": "Meltemi Biking",
+    "mapQuery": "Meltemi Biking, Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Meltemi+Biking%2C+Karpathos",
+    "bestFor": [
+      "Experienced riders",
+      "Adventure travelers",
+      "Sport groups"
+    ],
+    "vipHeadline": "A technical ride for guests who want a serious mountain-bike challenge.",
+    "highlights": [
+      "Experienced rider product",
+      "Strong adventure positioning",
+      "Good for sporty villa groups",
+      "Distinct from standard tours"
+    ],
+    "bookingNotes": "Confirm bike type, safety gear, route difficulty, insurance, minimum age, and e-bike alternatives.",
+    "faqs": [
+      {
+        "q": "Is Pigadia Trails Mountain Bike Experience suitable for families?",
+        "a": "It is best for Experienced riders, Adventure travelers, Sport groups. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Pigadia Trails Mountain Bike Experience take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Meltemi Biking, Karpathos. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Pigadia Trails Mountain Bike Experience?",
+        "a": "Sports clothes, closed shoes, water, sunscreen, and cycling experience."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Pigadia Trails Mountain Bike Experience. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Pigadia Trails Mountain Bike Experience in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Pigadia Trails Mountain Bike Experience in Karpathos. View price from \u20ac75, duration ~3 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "Pigadia Trails Mountain Bike Experience in Karpathos"
+  },
+  {
+    "id": "exp_021",
+    "slug": "red-canyon-bike-e-bike-tour-karpathos",
+    "title": "Red Canyon Bike / E-Bike Tour",
+    "category": "Adventure & Watersports",
+    "shortDescription": "A bike or e-bike tour for guests who want active sightseeing and distinctive island scenery.",
+    "fullDescription": "A strong half-day product for active couples and small groups who want more than beach time without committing to a full hike.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Meltemi Bike Shop, Pigadia",
+    "fromPrice": 60,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm difficulty, route, e-bike availability, equipment, minimum age, and transport requirements.",
+    "duration": "~3 hours",
+    "difficulty": "Confirm",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/05/karpathos-travel-red-canyon-meltimi-2025-1.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/05/karpathos-travel-red-canyon-meltimi-2025-3.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/05/karpathos-travel-red-canyon-meltimi-2025-2.jpg"
+    ],
+    "tags": [
+      "Adventure & Watersports",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Sports clothes",
+      "closed shoes",
+      "water",
+      "sunscreen",
+      "and comfortable cycling ability."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": true,
+    "partnerName": "Meltemi Bike Shop",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 80,
+    "badge": "Verified",
+    "operator": "Meltemi Bike Shop",
+    "mapQuery": "Meltemi Bike Shop, Pigadia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Meltemi+Bike+Shop%2C+Pigadia+Karpathos",
+    "bestFor": [
+      "Active couples",
+      "Friends",
+      "E-bike guests",
+      "Photography"
+    ],
+    "vipHeadline": "A scenic ride through one of Karpathos\u2019 more dramatic landscapes.",
+    "highlights": [
+      "Scenic adventure",
+      "E-bike-friendly potential",
+      "Good half-day activity",
+      "Strong visual content opportunity"
+    ],
+    "bookingNotes": "Confirm difficulty, route, e-bike availability, equipment, minimum age, and transport requirements.",
+    "faqs": [
+      {
+        "q": "Is Red Canyon Bike / E-Bike Tour suitable for families?",
+        "a": "It is best for Active couples, Friends, E-bike guests, Photography. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Red Canyon Bike / E-Bike Tour take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Meltemi Bike Shop, Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Red Canyon Bike / E-Bike Tour?",
+        "a": "Sports clothes, closed shoes, water, sunscreen, and comfortable cycling ability."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Red Canyon Bike / E-Bike Tour. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Red Canyon Bike / E-Bike Tour in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Red Canyon Bike / E-Bike Tour in Karpathos. View price from \u20ac60, duration ~3 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "Red Canyon Bike / E-Bike Tour in Karpathos"
+  },
+  {
+    "id": "exp_022",
+    "slug": "13-churches-bike-e-bike-tour-karpathos",
+    "title": "13 Churches Bike / E-Bike Tour",
+    "category": "Adventure & Watersports",
+    "shortDescription": "A bike or e-bike experience combining movement, scenery, and local cultural landmarks.",
+    "fullDescription": "A good hybrid product: active enough to feel like an experience, cultural enough to appeal beyond serious cyclists.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Meltemi Bike Shop, Pigadia",
+    "fromPrice": 60,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm route difficulty, church stops, bike/e-bike options, equipment, and meeting point.",
+    "duration": "~3 hours",
+    "difficulty": "Confirm",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/05/karpathos-travel-13-churches-meltemi-2025-1.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/05/karpathos-travel-13-churches-meltemi-2025-3.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/05/karpathos-travel-13-churches-meltemi-2025-2.jpg"
+    ],
+    "tags": [
+      "Adventure & Watersports",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Sports clothes",
+      "closed shoes",
+      "water",
+      "sunscreen",
+      "and camera."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Meltemi Bike Shop",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 79,
+    "badge": "Verified",
+    "operator": "Meltemi Bike Shop",
+    "mapQuery": "Meltemi Bike Shop, Pigadia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Meltemi+Bike+Shop%2C+Pigadia+Karpathos",
+    "bestFor": [
+      "Culture-active guests",
+      "E-bike travelers",
+      "Couples",
+      "Small groups"
+    ],
+    "vipHeadline": "A cultural cycling route through chapels, views, and quiet island corners.",
+    "highlights": [
+      "Culture plus activity",
+      "Good for e-bike guests",
+      "Distinctive theme",
+      "Suitable for small groups"
+    ],
+    "bookingNotes": "Confirm route difficulty, church stops, bike/e-bike options, equipment, and meeting point.",
+    "faqs": [
+      {
+        "q": "Is 13 Churches Bike / E-Bike Tour suitable for families?",
+        "a": "It is best for Culture-active guests, E-bike travelers, Couples, Small groups. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does 13 Churches Bike / E-Bike Tour take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Meltemi Bike Shop, Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for 13 Churches Bike / E-Bike Tour?",
+        "a": "Sports clothes, closed shoes, water, sunscreen, and camera."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in 13 Churches Bike / E-Bike Tour. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "13 Churches Bike / E-Bike Tour in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange 13 Churches Bike / E-Bike Tour in Karpathos. View price from \u20ac60, duration ~3 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "13 Churches Bike / E-Bike Tour in Karpathos"
+  },
+  {
+    "id": "exp_023",
+    "slug": "guided-sunset-village-tour-karpathos",
+    "title": "Guided Sunset Village Tour",
+    "category": "Culture & Village Tours",
+    "shortDescription": "A guided village tour for guests who want culture, scenery, sunset, and a slower local experience.",
+    "fullDescription": "Position as an elegant cultural afternoon/evening rather than a standard bus tour: villages, museums, Mesochori sunset, and dinner.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Pigadia Bus Station",
+    "fromPrice": 62,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Karpathos Travel lists Friday afternoon schedule, Pigadia Bus Station departure, transfers for Pigadia/Amoopi, dinner, and guide; confirm current dates and pickup list.",
+    "duration": "~8 hours",
+    "difficulty": "Easy",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2026/05/karpathos-travel-tui-sunset-village-tour-2026-34.jpg",
+      "https://www.greeka.com/village_beach/photos/1382/othos-top-1-1280.jpg",
+      "https://www.greeka.com/village_beach/photos/238/mesochori-top-1-1280.jpg"
+    ],
+    "tags": [
+      "Culture & Village Tours",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable shoes",
+      "camera",
+      "sun protection",
+      "water",
+      "light jacket",
+      "and cash for optional museums/souvenirs."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": true,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Karpathos Travel / local guide",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 78,
+    "badge": "Verified",
+    "operator": "Karpathos Travel / local guide",
+    "mapQuery": "Pigadia Bus Station Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Bus+Station+Karpathos",
+    "bestFor": [
+      "Couples",
+      "Culture travelers",
+      "Photography",
+      "Villa guests"
+    ],
+    "vipHeadline": "A golden-hour journey through the villages and atmosphere of Karpathos.",
+    "highlights": [
+      "Sunset and culture positioning",
+      "Easy difficulty",
+      "Good for couples and older guests",
+      "Dinner and transfers may be included"
+    ],
+    "bookingNotes": "Karpathos Travel lists Friday afternoon schedule, Pigadia Bus Station departure, transfers for Pigadia/Amoopi, dinner, and guide; confirm current dates and pickup list.",
+    "faqs": [
+      {
+        "q": "Is Guided Sunset Village Tour suitable for families?",
+        "a": "It is best for Couples, Culture travelers, Photography, Villa guests. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Guided Sunset Village Tour take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Pigadia Bus Station. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Guided Sunset Village Tour?",
+        "a": "Comfortable shoes, camera, sun protection, water, light jacket, and cash for optional museums/souvenirs."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Guided Sunset Village Tour. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Guided Sunset Village Tour in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Guided Sunset Village Tour in Karpathos. View price from \u20ac62, duration ~8 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "Guided Sunset Village Tour in Karpathos"
+  },
+  {
+    "id": "exp_024",
+    "slug": "olympos-village-and-diafani-day-trip-karpathos",
+    "title": "Olympos Village & Diafani Day Trip",
+    "category": "Culture & Village Tours",
+    "shortDescription": "A day trip combining the northern village of Olympos with the coastal atmosphere of Diafani.",
+    "fullDescription": "Olympos is a must-see cultural highlight: traditional architecture, local character, dramatic scenery, and northern island atmosphere.",
+    "locationName": "Olympos / Diafani",
+    "meetingPoint": "Pigadia Harbor",
+    "fromPrice": 30,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm transport format, guide availability, free time, lunch options, schedule, and sea/weather dependency if by boat.",
+    "duration": "~10 hours",
+    "difficulty": "Easy",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2026/05/karpathos-travel-tui-sunset-village-tour-2026-31-64.jpg",
+      "https://realgreekexperiences.com/wp-content/uploads/2023/12/A-view-of-Diafani-in-Karpathos.jpg",
+      "https://www.greeka.com/village_beach/photos/186/diafani-top-1-1280.jpg"
+    ],
+    "tags": [
+      "Culture & Village Tours",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable shoes",
+      "camera",
+      "sun protection",
+      "water",
+      "and cash for food/products."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": false,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": false,
+    "bestForGroups": false,
+    "partnerName": "Boat/bus partner",
+    "closestTo": [
+      "Pigadia",
+      "Diafani",
+      "Olympos"
+    ],
+    "popularity": 77,
+    "badge": "Verified",
+    "operator": "Boat/bus partner",
+    "mapQuery": "Pigadia Harbor Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Harbor+Karpathos",
+    "bestFor": [
+      "Culture travelers",
+      "Families",
+      "First-time visitors",
+      "Photography"
+    ],
+    "vipHeadline": "A full-day journey into the most iconic traditional village of Karpathos.",
+    "highlights": [
+      "Iconic Karpathos destination",
+      "Strong cultural appeal",
+      "Good for first-time visitors",
+      "Excellent photography opportunity"
+    ],
+    "bookingNotes": "Confirm transport format, guide availability, free time, lunch options, schedule, and sea/weather dependency if by boat.",
+    "faqs": [
+      {
+        "q": "Is Olympos Village & Diafani Day Trip suitable for families?",
+        "a": "It is best for Culture travelers, Families, First-time visitors, Photography. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Olympos Village & Diafani Day Trip take place?",
+        "a": "The listed area is Olympos / Diafani; the listed location or meeting area is Pigadia Harbor. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Olympos Village & Diafani Day Trip?",
+        "a": "Comfortable shoes, camera, sun protection, water, and cash for food/products."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Olympos Village & Diafani Day Trip. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Olympos Village & Diafani Day Trip in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Olympos Village & Diafani Day Trip in Karpathos. View price from \u20ac30, duration ~10 hours, area Olympos / Diafani, what to expect, and request availability.",
+    "h1": "Olympos Village & Diafani Day Trip in Karpathos"
+  },
+  {
+    "id": "exp_025",
+    "slug": "saria-island-guided-tour-with-transfer-karpathos",
+    "title": "Saria Island Guided Tour with Transfer",
+    "category": "Sea & Boat Trips",
+    "shortDescription": "A guided Saria Island day experience with transfer, combining sea, scenery, and local history.",
+    "fullDescription": "One of the strongest sea-day products: remote, cinematic, and special. A signature full-day escape for guests who want discovery beyond a normal beach day.",
+    "locationName": "Saria",
+    "meetingPoint": "Pigadia Harbor",
+    "fromPrice": 55,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm boat type, pickup/transfer details, lunch/food, swimming stops, guide language, and weather policy.",
+    "duration": "~10 hours",
+    "difficulty": "Easy to moderate",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/07/karpathos-travel-saria-none-guided-tour-2025-suzpa-45.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/07/karpathos-travel-saria-none-guided-tour-2025-suzpa-43.jpg",
+      "https://i.pinimg.com/originals/57/0e/19/570e19aa8e953ea834babae21d078c2c.png"
+    ],
+    "tags": [
+      "Sea & Boat Trips",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Swimwear",
+      "towel",
+      "sunscreen",
+      "hat",
+      "water",
+      "snacks",
+      "camera",
+      "and suitable footwear if walking."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": true,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Karpathos Travel / boat partner",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 76,
+    "badge": "Verified",
+    "operator": "Karpathos Travel / boat partner",
+    "mapQuery": "Pigadia Harbor Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Harbor+Karpathos",
+    "bestFor": [
+      "Families",
+      "Couples",
+      "Sea lovers",
+      "History"
+    ],
+    "vipHeadline": "A full-day island escape to wild Saria, arranged with ease.",
+    "highlights": [
+      "Full-day sea escape",
+      "Strong destination appeal",
+      "Good for couples and families",
+      "Premium photography potential"
+    ],
+    "bookingNotes": "Confirm boat type, pickup/transfer details, lunch/food, swimming stops, guide language, and weather policy.",
+    "faqs": [
+      {
+        "q": "Is Saria Island Guided Tour with Transfer suitable for families?",
+        "a": "It is best for Families, Couples, Sea lovers, History. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Saria Island Guided Tour with Transfer take place?",
+        "a": "The listed area is Saria; the listed location or meeting area is Pigadia Harbor. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Saria Island Guided Tour with Transfer?",
+        "a": "Swimwear, towel, sunscreen, hat, water, snacks, camera, and suitable footwear if walking."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Saria Island Guided Tour with Transfer. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Saria Island Guided Tour with Transfer in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Saria Island Guided Tour with Transfer in Karpathos. View price from \u20ac55, duration ~10 hours, area Saria, what to expect, and request availability.",
+    "h1": "Saria Island Guided Tour with Transfer in Karpathos"
+  },
+  {
+    "id": "exp_026",
+    "slug": "rock-cave-explorer-by-glass-bottom-boat-karpathos",
+    "title": "Rock Cave Explorer by Glass-Bottom Boat",
+    "category": "Sea & Boat Trips",
+    "shortDescription": "A compact glass-bottom boat trip for guests who want relaxed sea activity without spending the whole day away.",
+    "fullDescription": "Ideal for families, older guests, and short-stay visitors who want a light sea day from Pigadia.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Pigadia Harbor",
+    "fromPrice": 35,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm route, swimming stops, boat name, capacity, equipment, and weather policy.",
+    "duration": "~2 hours",
+    "difficulty": "Easy",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/08/karpathos-travel-nemo-glass-bottom-boat-2025-14.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/08/karpathos-travel-nemo-glass-bottom-boat-2025-2.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/08/karpathos-travel-nemo-glass-bottom-boat-2025-4.jpg"
+    ],
+    "tags": [
+      "Sea & Boat Trips",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Swimwear if swimming is included",
+      "towel",
+      "sunscreen",
+      "water",
+      "and camera."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": false,
+    "bestForGroups": false,
+    "partnerName": "Nemo / boat partner",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 75,
+    "badge": "Verified",
+    "operator": "Nemo / boat partner",
+    "mapQuery": "Pigadia Harbor Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Harbor+Karpathos",
+    "bestFor": [
+      "Families",
+      "Short-trip guests",
+      "Snorkeling",
+      "Photography"
+    ],
+    "vipHeadline": "A short, easy sea experience with caves, blue water, and family appeal.",
+    "highlights": [
+      "Short duration",
+      "Easy family product",
+      "Glass-bottom boat appeal",
+      "Good for guests avoiding full-day cruises"
+    ],
+    "bookingNotes": "Confirm route, swimming stops, boat name, capacity, equipment, and weather policy.",
+    "faqs": [
+      {
+        "q": "Is Rock Cave Explorer by Glass-Bottom Boat suitable for families?",
+        "a": "It is best for Families, Short-trip guests, Snorkeling, Photography. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Rock Cave Explorer by Glass-Bottom Boat take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Pigadia Harbor. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Rock Cave Explorer by Glass-Bottom Boat?",
+        "a": "Swimwear if swimming is included, towel, sunscreen, water, and camera."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Rock Cave Explorer by Glass-Bottom Boat. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Rock Cave Explorer by Glass-Bottom Boat in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Rock Cave Explorer by Glass-Bottom Boat in Karpathos. View price from \u20ac35, duration ~2 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "Rock Cave Explorer by Glass-Bottom Boat in Karpathos"
+  },
+  {
+    "id": "exp_027",
+    "slug": "famous-beaches-full-day-cruise-karpathos",
+    "title": "Famous Beaches Full-Day Cruise",
+    "category": "Sea & Boat Trips",
+    "shortDescription": "A beach-focused boat excursion for guests who want to swim, relax, and see multiple coastal highlights.",
+    "fullDescription": "A very sellable product because it is easy to understand: beaches, swimming, and a beautiful day at sea without planning or driving.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Pigadia Harbor",
+    "fromPrice": 30,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm beach stops, food/lunch, boat type, pickup options, and snorkeling gear.",
+    "duration": "~8 hours",
+    "difficulty": "Easy",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/07/karpathos-travel-the-famous-beaches-excursion-2025-33.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/Beaches-tours-16_800.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/07/karpathos-travel-the-famous-beaches-excursion-2025-9.jpg"
+    ],
+    "tags": [
+      "Sea & Boat Trips",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Swimwear",
+      "towel",
+      "sunscreen",
+      "hat",
+      "water",
+      "snacks/cash",
+      "and camera."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": true,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": false,
+    "bestForGroups": false,
+    "partnerName": "Boat partner",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 74,
+    "badge": "Verified",
+    "operator": "Boat partner",
+    "mapQuery": "Pigadia Harbor Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Harbor+Karpathos",
+    "bestFor": [
+      "Families",
+      "Beach lovers",
+      "First-time visitors",
+      "Photography"
+    ],
+    "vipHeadline": "A relaxed full-day cruise through some of Karpathos\u2019 most beautiful beaches.",
+    "highlights": [
+      "Simple and marketable",
+      "Good for families and couples",
+      "Strong beach photography appeal",
+      "Easy first-time visitor recommendation"
+    ],
+    "bookingNotes": "Confirm beach stops, food/lunch, boat type, pickup options, and snorkeling gear.",
+    "faqs": [
+      {
+        "q": "Is Famous Beaches Full-Day Cruise suitable for families?",
+        "a": "It is best for Families, Beach lovers, First-time visitors, Photography. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Famous Beaches Full-Day Cruise take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Pigadia Harbor. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Famous Beaches Full-Day Cruise?",
+        "a": "Swimwear, towel, sunscreen, hat, water, snacks/cash, and camera."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Famous Beaches Full-Day Cruise. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Famous Beaches Full-Day Cruise in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Famous Beaches Full-Day Cruise in Karpathos. View price from \u20ac30, duration ~8 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "Famous Beaches Full-Day Cruise in Karpathos"
+  },
+  {
+    "id": "exp_028",
+    "slug": "saria-island-excursion-karpathos",
+    "title": "Saria Island Excursion",
+    "category": "Sea & Boat Trips",
+    "shortDescription": "A full-day boat excursion to Saria Island for guests seeking a remote Karpathos experience.",
+    "fullDescription": "A slightly more adventurous alternative to a standard beach cruise, combining remote landscapes, island history, swimming, and discovery.",
+    "locationName": "Saria",
+    "meetingPoint": "Pigadia Harbor",
+    "fromPrice": 30,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm difference from guided product, inclusions, route, guide status, food, and weather policy.",
+    "duration": "~10 hours",
+    "difficulty": "Easy with optional hike",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/07/karpathos-travel-saria-none-guided-tour-2025-suzpa-45.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/07/karpathos-travel-saria-none-guided-tour-2025-suzpa-43.jpg",
+      "https://www.greece-is.com/wp-content/uploads/2024/09/DSC_2875h.jpg"
+    ],
+    "tags": [
+      "Sea & Boat Trips",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Swimwear",
+      "towel",
+      "sunscreen",
+      "water",
+      "snacks",
+      "camera",
+      "and walking shoes if hiking."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Boat partner",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 73,
+    "badge": "Verified",
+    "operator": "Boat partner",
+    "mapQuery": "Pigadia Harbor Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pigadia+Harbor+Karpathos",
+    "bestFor": [
+      "Sea lovers",
+      "History",
+      "Families",
+      "Adventurous couples"
+    ],
+    "vipHeadline": "A wild island day for guests who want sea, silence, and discovery.",
+    "highlights": [
+      "Remote island atmosphere",
+      "Strong full-day product",
+      "History/nature combination",
+      "High visual appeal"
+    ],
+    "bookingNotes": "Confirm difference from guided product, inclusions, route, guide status, food, and weather policy.",
+    "faqs": [
+      {
+        "q": "Is Saria Island Excursion suitable for families?",
+        "a": "It is best for Sea lovers, History, Families, Adventurous couples. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Saria Island Excursion take place?",
+        "a": "The listed area is Saria; the listed location or meeting area is Pigadia Harbor. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Saria Island Excursion?",
+        "a": "Swimwear, towel, sunscreen, water, snacks, camera, and walking shoes if hiking."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Saria Island Excursion. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Saria Island Excursion in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Saria Island Excursion in Karpathos. View price from \u20ac30, duration ~10 hours, area Saria, what to expect, and request availability.",
+    "h1": "Saria Island Excursion in Karpathos"
+  },
+  {
+    "id": "exp_029",
+    "slug": "profitis-ilias-panoramic-hike-karpathos",
+    "title": "Profitis Ilias Panoramic Hike",
+    "category": "Hiking Tours",
+    "shortDescription": "A guided hike toward Profitis Ilias with panoramic views and deeper landscape context.",
+    "fullDescription": "A strong active-but-not-extreme experience with elevation reward, views, and local storytelling.",
+    "locationName": "Aperi",
+    "meetingPoint": "Aperi Municipal Stadium",
+    "fromPrice": 48,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm meeting point, route difficulty, minimum age, transport, water requirements, and heat policy.",
+    "duration": "~4 hours",
+    "difficulty": "Moderate",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/09/b5/3c/51.jpg",
+      "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/09/b5/3c/78.jpg",
+      "https://a.veronikasadventure.com/tour/private-walking-audio-tour-profitis-ilias-hike-by-art-and-walk-d24033-138699P8-2.jpg"
+    ],
+    "tags": [
+      "Hiking Tours",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Hiking shoes",
+      "water",
+      "hat",
+      "sunscreen",
+      "light snack",
+      "and camera."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Art and Walk",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 72,
+    "badge": "Verified",
+    "operator": "Art and Walk",
+    "mapQuery": "Aperi Municipal Stadium Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Aperi+Municipal+Stadium+Karpathos",
+    "bestFor": [
+      "Hikers",
+      "View seekers",
+      "Active couples",
+      "Photography"
+    ],
+    "vipHeadline": "A refined mountain walk to one of Karpathos\u2019 rewarding viewpoints.",
+    "highlights": [
+      "Beautiful viewpoints",
+      "Moderate active experience",
+      "Good for photographers",
+      "Strong guided-walk product"
+    ],
+    "bookingNotes": "Confirm meeting point, route difficulty, minimum age, transport, water requirements, and heat policy.",
+    "faqs": [
+      {
+        "q": "Is Profitis Ilias Panoramic Hike suitable for families?",
+        "a": "It is best for Hikers, View seekers, Active couples, Photography. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Profitis Ilias Panoramic Hike take place?",
+        "a": "The listed area is Aperi; the listed location or meeting area is Aperi Municipal Stadium. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Profitis Ilias Panoramic Hike?",
+        "a": "Hiking shoes, water, hat, sunscreen, light snack, and camera."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Profitis Ilias Panoramic Hike. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Profitis Ilias Panoramic Hike in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Profitis Ilias Panoramic Hike in Karpathos. View price from \u20ac48, duration ~4 hours, area Aperi, what to expect, and request availability.",
+    "h1": "Profitis Ilias Panoramic Hike in Karpathos"
+  },
+  {
+    "id": "exp_030",
+    "slug": "mountain-villages-walk-with-local-flavor-karpathos",
+    "title": "Mountain Villages Walk with Local Flavor",
+    "category": "Hiking Tours",
+    "shortDescription": "A guided mountain-village walk combining scenery, culture, and traditional Karpathos flavor.",
+    "fullDescription": "One of the most attractive walks because it combines nature with cultural value and can appeal beyond serious hikers.",
+    "locationName": "Volada / Pini",
+    "meetingPoint": "Art and Walk, Pini",
+    "fromPrice": 60,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm food/lunch inclusions, route, pickup options, group size, and difficulty.",
+    "duration": "~3 hours",
+    "difficulty": "Moderate",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2025/04/Mountain-villages-walk-15-copy.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2025/04/Mountain-villages-walk-22-copy.jpg",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1395776899215104"
+    ],
+    "tags": [
+      "Hiking Tours",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Walking shoes",
+      "water",
+      "sun protection",
+      "camera",
+      "and cash if drinks/extras are not included."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": true,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Art and Walk",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 71,
+    "badge": "Verified",
+    "operator": "Art and Walk",
+    "mapQuery": "Art and Walk, Pini Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Art+and+Walk%2C+Pini+Karpathos",
+    "bestFor": [
+      "Couples",
+      "Villa guests",
+      "Food culture",
+      "Moderate hikers"
+    ],
+    "vipHeadline": "A graceful walk through mountain villages, views, and local flavor.",
+    "highlights": [
+      "Hike plus culture",
+      "Strong villa guest fit",
+      "Good for couples",
+      "Higher perceived value with local flavor"
+    ],
+    "bookingNotes": "Confirm food/lunch inclusions, route, pickup options, group size, and difficulty.",
+    "faqs": [
+      {
+        "q": "Is Mountain Villages Walk with Local Flavor suitable for families?",
+        "a": "It is best for Couples, Villa guests, Food culture, Moderate hikers. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Mountain Villages Walk with Local Flavor take place?",
+        "a": "The listed area is Volada / Pini; the listed location or meeting area is Art and Walk, Pini. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Mountain Villages Walk with Local Flavor?",
+        "a": "Walking shoes, water, sun protection, camera, and cash if drinks/extras are not included."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Mountain Villages Walk with Local Flavor. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Mountain Villages Walk with Local Flavor in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Mountain Villages Walk with Local Flavor in Karpathos. View price from \u20ac60, duration ~3 hours, area Volada / Pini, what to expect, and request availability.",
+    "h1": "Mountain Villages Walk with Local Flavor in Karpathos"
+  },
+  {
+    "id": "exp_031",
+    "slug": "lastos-off-the-beaten-path-hike-karpathos",
+    "title": "Lastos Off-the-Beaten-Path Hike",
+    "category": "Hiking Tours",
+    "shortDescription": "A guided hike through the Lastos area for guests who want nature, views, and less obvious island scenery.",
+    "fullDescription": "An authentic off-the-beaten-track hiking option for visitors who have seen the beaches and want the island interior with a guide.",
+    "locationName": "Volada / Pini",
+    "meetingPoint": "Mount Lastos / Pini area",
+    "fromPrice": 48,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm fear-of-heights notes, route conditions, transport, seasonal waterfall possibility, and minimum fitness level.",
+    "duration": "~3.5 hours",
+    "difficulty": "Moderate",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://karpathostravel.com/wp-content/uploads/2023/07/lastos-hike-2025-22.jpg",
+      "https://karpathostravel.com/wp-content/uploads/2023/07/lastos-hike-2025-24.jpg",
+      "https://res.cloudinary.com/manawa/image/private/f_auto,c_limit,w_3840,q_auto/98d568d9bd18402b03c11289a88a004d"
+    ],
+    "tags": [
+      "Hiking Tours",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Hiking shoes",
+      "water",
+      "sun protection",
+      "snack",
+      "and camera."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Art and Walk",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 70,
+    "badge": "Verified",
+    "operator": "Art and Walk",
+    "mapQuery": "Mount Lastos / Pini area Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mount+Lastos+%2F+Pini+area+Karpathos",
+    "bestFor": [
+      "Active couples",
+      "Nature lovers",
+      "Photography",
+      "Repeat visitors"
+    ],
+    "vipHeadline": "A quieter mountain hike for guests who want the hidden side of Karpathos.",
+    "highlights": [
+      "Authentic mountain scenery",
+      "Good for repeat visitors",
+      "More adventurous than easy walks",
+      "Strong nature positioning"
+    ],
+    "bookingNotes": "Confirm fear-of-heights notes, route conditions, transport, seasonal waterfall possibility, and minimum fitness level.",
+    "faqs": [
+      {
+        "q": "Is Lastos Off-the-Beaten-Path Hike suitable for families?",
+        "a": "It is best for Active couples, Nature lovers, Photography, Repeat visitors. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Lastos Off-the-Beaten-Path Hike take place?",
+        "a": "The listed area is Volada / Pini; the listed location or meeting area is Mount Lastos / Pini area. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Lastos Off-the-Beaten-Path Hike?",
+        "a": "Hiking shoes, water, sun protection, snack, and camera."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Lastos Off-the-Beaten-Path Hike. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Lastos Off-the-Beaten-Path Hike in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Lastos Off-the-Beaten-Path Hike in Karpathos. View price from \u20ac48, duration ~3.5 hours, area Volada / Pini, what to expect, and request availability.",
+    "h1": "Lastos Off-the-Beaten-Path Hike in Karpathos"
+  },
+  {
+    "id": "exp_032",
+    "slug": "agia-kyriaki-scenic-walk-karpathos",
+    "title": "Agia Kyriaki Scenic Walk",
+    "category": "Hiking Tours",
+    "shortDescription": "A guided walk with sea views and a chapel destination for a rewarding active morning.",
+    "fullDescription": "A good mid-level walking product: more interesting than a stroll, but still approachable for active guests.",
+    "locationName": "Pigadia",
+    "meetingPoint": "Alpha Bank, Pigadia",
+    "fromPrice": 36,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Confirm steepness, heat conditions, route safety, meeting point, and transport requirements.",
+    "duration": "~3.5 hours",
+    "difficulty": "Moderate / confirm steep sections",
+    "groupType": "group",
+    "maxGuests": 12,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://www.slowtravelgreece.com/wp-content/uploads/2022/08/Agia-Kyriaki19.jpeg",
+      "https://karpathostravel.com/wp-content/uploads/2023/02/agia-kiriaki-walk-karpathos-travel-2023-1440x1085-1.jpg",
+      "https://cdn.powertraveller.com/media/the-agia-kyriaki-walk-by-art-and-walk-d24033-138699P4-3.jpg"
+    ],
+    "tags": [
+      "Hiking Tours",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Walking shoes",
+      "water",
+      "hat",
+      "sunscreen",
+      "and camera."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": false,
+    "foodIncluded": false,
+    "familyFriendly": false,
+    "bestForCouples": true,
+    "bestForGroups": false,
+    "partnerName": "Art and Walk",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 69,
+    "badge": null,
+    "operator": "Art and Walk",
+    "mapQuery": "Alpha Bank, Pigadia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Alpha+Bank%2C+Pigadia+Karpathos",
+    "bestFor": [
+      "Active guests",
+      "View seekers",
+      "Couples",
+      "Morning activity"
+    ],
+    "vipHeadline": "A scenic walk toward one of Pigadia\u2019s beautiful coastal viewpoints.",
+    "highlights": [
+      "Good view reward",
+      "Half-day length",
+      "Pigadia-area relevance",
+      "Good value product"
+    ],
+    "bookingNotes": "Confirm steepness, heat conditions, route safety, meeting point, and transport requirements.",
+    "faqs": [
+      {
+        "q": "Is Agia Kyriaki Scenic Walk suitable for families?",
+        "a": "It is best for Active guests, View seekers, Couples, Morning activity. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does Agia Kyriaki Scenic Walk take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is Alpha Bank, Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for Agia Kyriaki Scenic Walk?",
+        "a": "Walking shoes, water, hat, sunscreen, and camera."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in Agia Kyriaki Scenic Walk. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "Agia Kyriaki Scenic Walk in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange Agia Kyriaki Scenic Walk in Karpathos. View price from \u20ac36, duration ~3.5 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "Agia Kyriaki Scenic Walk in Karpathos"
+  },
+  {
+    "id": "exp_033",
+    "slug": "valley-walk-of-pigadia-karpathos",
+    "title": "The Valley Walk of Pigadia",
+    "category": "Hiking Tours",
+    "shortDescription": "An easy guided walk around the Pigadia valley, ideal for light activity and local context.",
+    "fullDescription": "One of the best entry-level walking experiences for families, older guests, and first-day orientation without committing to a mountain hike.",
+    "locationName": "Pigadia",
+    "meetingPoint": "AutoTour / Miramare in Pigadia",
+    "fromPrice": 36,
+    "currency": "\u20ac",
+    "priceType": "per_person",
+    "priceNote": "Art and Walk lists Monday schedule, 7 km, easy difficulty, meeting at AutoTour/Miramare; confirm current schedule and pickup options.",
+    "duration": "~3.5 hours",
+    "difficulty": "Easy",
+    "groupType": "both",
+    "maxGuests": 15,
+    "seasonStart": "May",
+    "seasonEnd": "October",
+    "imageUrls": [
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1413074124152048",
+      "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1413074120818715",
+      "https://media-cdn.tripadvisor.com/media/photo-s/29/02/55/23/hiking-on-karpathos-with.jpg"
+    ],
+    "tags": [
+      "Hiking Tours",
+      "Karpathos Activities"
+    ],
+    "included": [
+      "Guided experience",
+      "Local operator support",
+      "All safety gear"
+    ],
+    "notIncluded": [
+      "Personal expenses",
+      "Gratuities",
+      "Hotel transfer (unless selected)"
+    ],
+    "whatToBring": [
+      "Comfortable walking shoes",
+      "water",
+      "hat",
+      "sunscreen",
+      "and camera."
+    ],
+    "safetyNotes": [
+      "Follow the guide instructions at all times",
+      "Wear appropriate gear",
+      "Stay hydrated"
+    ],
+    "cancellationPolicy": "Free cancellation up to 24h before departure.",
+    "weatherDependent": true,
+    "pickupAvailable": true,
+    "foodIncluded": false,
+    "familyFriendly": true,
+    "bestForCouples": false,
+    "bestForGroups": false,
+    "partnerName": "Art and Walk",
+    "closestTo": [
+      "Pigadia"
+    ],
+    "popularity": 68,
+    "badge": "Verified",
+    "operator": "Art and Walk",
+    "mapQuery": "AutoTour / Miramare in Pigadia Karpathos",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=AutoTour+%2F+Miramare+in+Pigadia+Karpathos",
+    "bestFor": [
+      "Families",
+      "Beginners",
+      "Older guests",
+      "First-day orientation"
+    ],
+    "vipHeadline": "A gentle first taste of Karpathos on foot.",
+    "highlights": [
+      "Best beginner hike",
+      "Good for families and older guests",
+      "Easy first-day activity",
+      "Low physical barrier"
+    ],
+    "bookingNotes": "Art and Walk lists Monday schedule, 7 km, easy difficulty, meeting at AutoTour/Miramare; confirm current schedule and pickup options.",
+    "faqs": [
+      {
+        "q": "Is The Valley Walk of Pigadia suitable for families?",
+        "a": "It is best for Families, Beginners, Older guests, First-day orientation. Final suitability depends on age, fitness, weather, and provider conditions."
+      },
+      {
+        "q": "Where does The Valley Walk of Pigadia take place?",
+        "a": "The listed area is Pigadia; the listed location or meeting area is AutoTour / Miramare in Pigadia. Final meeting point is confirmed before booking."
+      },
+      {
+        "q": "What should I bring for The Valley Walk of Pigadia?",
+        "a": "Comfortable walking shoes, water, hat, sunscreen, and camera."
+      },
+      {
+        "q": "How do I book this activity?",
+        "a": "Send your dates, group size, where you are staying, and the activity name. Availability and final details are confirmed with the local partner before booking."
+      },
+      {
+        "q": "Can this be arranged for a private group?",
+        "a": "Some activities can be arranged privately or semi-privately depending on date, provider capacity, group size, and weather. Ask for private options when sending your request."
+      },
+      {
+        "q": "Are prices final?",
+        "a": "Prices are shown as starting prices where available. Final price may vary by date, group size, season, supplier, and selected package."
+      }
+    ],
+    "ctaPrimary": "Check Availability",
+    "ctaSecondary": "Save Activity",
+    "whatsappPrefillTemplate": "Hello, I\u2019m interested in The Valley Walk of Pigadia. My dates are [dates], group size is [number], and we are staying in [area]. Can you send availability and options?",
+    "seoTitle": "The Valley Walk of Pigadia in Karpathos | Karpathos Activities",
+    "seoMetaDescription": "Arrange The Valley Walk of Pigadia in Karpathos. View price from \u20ac36, duration ~3.5 hours, area Pigadia, what to expect, and request availability.",
+    "h1": "The Valley Walk of Pigadia in Karpathos"
+  }
+];
+
+export function findActivity(slug: string) {
+  return ACTIVITIES.find((a) => a.slug === slug);
+}
+
+export function similarActivities(activity: Activity, limit = 3) {
+  return ACTIVITIES.filter((a) => a.id !== activity.id && a.category === activity.category)
+    .slice(0, limit);
+}

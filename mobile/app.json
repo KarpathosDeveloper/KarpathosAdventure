@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Karpathos Adventures",
+    "slug": "karpathos-adventures",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#FAF9F6"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.karpathos.adventures"
+    }
+  }
+}

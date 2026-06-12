@@ -1,0 +1,75 @@
+[debug] [2026-06-12T11:02:53.354Z] ----------------------------------------------------------------------
+[debug] [2026-06-12T11:02:53.357Z] Command:       /Users/aaurishtechie/.nvm/versions/node/v22.20.0/bin/node /Users/aaurishtechie/.nvm/versions/node/v22.20.0/bin/firebase init
+[debug] [2026-06-12T11:02:53.357Z] CLI Version:   15.20.0
+[debug] [2026-06-12T11:02:53.357Z] Platform:      darwin
+[debug] [2026-06-12T11:02:53.357Z] Node Version:  v22.20.0
+[debug] [2026-06-12T11:02:53.358Z] Time:          Fri Jun 12 2026 16:47:53 GMT+0545 (Nepal Time)
+[debug] [2026-06-12T11:02:53.358Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/aaurishtechie/Desktop/karpathos-activity-booking-platform (1)/frontend
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-06-12T11:03:49.219Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-12T11:03:49.220Z] > authorizing via signed-in user (karpathosdiscover@gmail.com)
+[debug] [2026-06-12T11:03:49.223Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:03:49.223Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:03:49.225Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2026-06-12T11:03:56.912Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-12T11:03:56.912Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] 
+=== Dataconnect Setup
+[info] i  dataconnect: ensuring required API firebasedataconnect.googleapis.com is enabled... 
+[debug] [2026-06-12T11:04:01.416Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:04:01.416Z] Checked if tokens are valid: true, expires at: 1781265671454
+[info] i  dataconnect: ensuring required API sqladmin.googleapis.com is enabled... 
+[debug] [2026-06-12T11:04:01.417Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:04:01.417Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:04:01.417Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/karpathosdiscover-67f1a/services/firebasedataconnect.googleapis.com [none]
+[debug] [2026-06-12T11:04:01.417Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/karpathosdiscover-67f1a/services/firebasedataconnect.googleapis.com  x-goog-user-project=karpathosdiscover-67f1a
+[debug] [2026-06-12T11:04:01.419Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/karpathosdiscover-67f1a/services/sqladmin.googleapis.com [none]
+[debug] [2026-06-12T11:04:01.419Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/karpathosdiscover-67f1a/services/sqladmin.googleapis.com  x-goog-user-project=karpathosdiscover-67f1a
+[debug] [2026-06-12T11:04:03.591Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/karpathosdiscover-67f1a/services/firebasedataconnect.googleapis.com 200
+[debug] [2026-06-12T11:04:03.591Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/karpathosdiscover-67f1a/services/firebasedataconnect.googleapis.com [omitted]
+[info] ✔  dataconnect: required API firebasedataconnect.googleapis.com is enabled 
+[debug] [2026-06-12T11:04:03.602Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/karpathosdiscover-67f1a/services/sqladmin.googleapis.com 200
+[debug] [2026-06-12T11:04:03.602Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/karpathosdiscover-67f1a/services/sqladmin.googleapis.com [omitted]
+[info] ✔  dataconnect: required API sqladmin.googleapis.com is enabled 
+[debug] [2026-06-12T11:04:03.612Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:04:03.612Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:04:03.612Z] >>> [apiv2][query] GET https://firebasedataconnect.googleapis.com/v1/projects/karpathosdiscover-67f1a/locations/-/services [none]
+[debug] [2026-06-12T11:04:05.918Z] <<< [apiv2][status] GET https://firebasedataconnect.googleapis.com/v1/projects/karpathosdiscover-67f1a/locations/-/services 200
+[debug] [2026-06-12T11:04:05.919Z] <<< [apiv2][body] GET https://firebasedataconnect.googleapis.com/v1/projects/karpathosdiscover-67f1a/locations/-/services {}
+[debug] [2026-06-12T11:05:09.486Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:05:09.486Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:05:09.487Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/karpathosdiscover-67f1a/billingInfo [none]
+[debug] [2026-06-12T11:05:14.268Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/karpathosdiscover-67f1a/billingInfo 200
+[debug] [2026-06-12T11:05:14.268Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/karpathosdiscover-67f1a/billingInfo {"name":"projects/karpathosdiscover-67f1a/billingInfo","projectId":"karpathosdiscover-67f1a","billingAccountName":"","billingEnabled":false}
+[debug] [2026-06-12T11:05:14.268Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:05:14.268Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:05:14.269Z] >>> [apiv2][query] GET https://monitoring.googleapis.com/v3/projects/karpathosdiscover-67f1a/timeSeries/ filter=metric.type%3D%22serviceruntime.googleapis.com%2Fquota%2Fallocation%2Fusage%22+AND+metric.label.quota_metric+%3D+%22sqladmin.googleapis.com%2Ffdc_lifetime_free_trial_per_project%22&interval.endTime=2026-06-12T11%3A05%3A14.268Z&interval.startTime=2026-06-05T11%3A05%3A14.268Z
+[debug] [2026-06-12T11:05:21.359Z] <<< [apiv2][status] GET https://monitoring.googleapis.com/v3/projects/karpathosdiscover-67f1a/timeSeries/ 200
+[debug] [2026-06-12T11:05:21.359Z] <<< [apiv2][body] GET https://monitoring.googleapis.com/v3/projects/karpathosdiscover-67f1a/timeSeries/ {"unit":"1"}
+[info] ✔  dataconnect: CloudSQL no cost trial available! 
+[debug] [2026-06-12T11:05:21.360Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:05:21.360Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:05:21.360Z] >>> [apiv2][query] GET https://sqladmin.googleapis.com/v1/projects/karpathosdiscover-67f1a/instances [none]
+[debug] [2026-06-12T11:05:22.497Z] <<< [apiv2][status] GET https://sqladmin.googleapis.com/v1/projects/karpathosdiscover-67f1a/instances 200
+[debug] [2026-06-12T11:05:22.497Z] <<< [apiv2][body] GET https://sqladmin.googleapis.com/v1/projects/karpathosdiscover-67f1a/instances {}
+[debug] [2026-06-12T11:05:22.498Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:05:22.498Z] Checked if tokens are valid: true, expires at: 1781265671454
+[debug] [2026-06-12T11:05:22.498Z] >>> [apiv2][query] GET https://firebasedataconnect.googleapis.com/v1/projects/karpathosdiscover-67f1a/locations [none]
+[debug] [2026-06-12T11:05:24.332Z] <<< [apiv2][status] GET https://firebasedataconnect.googleapis.com/v1/projects/karpathosdiscover-67f1a/locations 200

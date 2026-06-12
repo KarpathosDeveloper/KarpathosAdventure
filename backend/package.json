@@ -1,0 +1,14 @@
+{
+  "name": "karpathos-backend",
+  "version": "1.0.0",
+  "description": "Firebase Firestore configurations and admin seeding tools for Karpathos Adventure",
+  "main": "seed.js",
+  "type": "module",
+  "scripts": {
+    "db:seed": "node seed.js",
+    "db:rules": "firebase deploy --only firestore:rules"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.1.0"
+  }
+}
